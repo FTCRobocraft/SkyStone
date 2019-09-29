@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import android.hardware.camera2.CameraDevice;
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.action.Action;
-import org.firstinspires.ftc.teamcode.hardware.RoverRuckusHardware;
+import org.firstinspires.ftc.teamcode.hardware.SkyStoneHardware;
 
 import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.LABEL_GOLD_MINERAL;
 import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.LABEL_SILVER_MINERAL;
@@ -16,7 +14,7 @@ import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.TFOD
  * Created by djfigs1 on 11/18/16.
  */
 
-public class ActionExecutor extends RoverRuckusHardware {
+public class SkyStoneActionExecutor extends SkyStoneHardware {
 
     public ActionSequence actionSequence;
     public boolean initVuforia = false;

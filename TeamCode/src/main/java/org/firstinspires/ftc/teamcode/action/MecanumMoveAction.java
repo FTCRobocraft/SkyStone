@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.util.EncoderDrive;
-import org.firstinspires.ftc.teamcode.hardware.RelicRecoveryHardware;
-import org.firstinspires.ftc.teamcode.hardware.RoverRuckusHardware;
 
 /**
  * Created by djfigs1 on 9/30/17.
@@ -34,7 +32,7 @@ public class MecanumMoveAction implements Action {
     }
 
     public void init(BaseHardware hardware) {
-        driver = new EncoderDrive(((RoverRuckusHardware) hardware).omniDrive);
+        driver = new EncoderDrive(hardware.omniDrive);
         driver.setInchesToDrive(direction, distance, speed, timeout);
     }
 

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class BaseHardware extends OpMode {
 
@@ -18,6 +19,8 @@ public class BaseHardware extends OpMode {
     public VuforiaTrackable relicTemplate;
 
     public TFObjectDetector tfod;
+    public OmniDrive omniDrive;
+
     //endregion
 //We had peruvian chicken today
     // Encoder Setup

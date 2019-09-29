@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
-import org.firstinspires.ftc.teamcode.hardware.RoverRuckusHardware;
 
 /**
  * Created by djfigs1 on 9/30/17. not really

@@ -2,16 +2,15 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.autonomous.sequences.DumpBlockSequence;
 import org.firstinspires.ftc.teamcode.autonomous.sequences.TestSequence;
-import org.firstinspires.ftc.teamcode.util.ActionExecutor;
+import org.firstinspires.ftc.teamcode.util.SkyStoneActionExecutor;
 
 /**
  * Created by djfigs1 on 1/20/18.
  */
 
 @Autonomous(name = "TestSequence")
-public class TestSequenceExecutor extends ActionExecutor {
+public class TestSequenceExecutorSkyStone extends SkyStoneActionExecutor {
 
     TestSequence testSequence;
 
@@ -28,6 +27,5 @@ public class TestSequenceExecutor extends ActionExecutor {
     @Override
     public void loop() {
         super.loop();
-        telemetry.addData("pos", testSequence.blockDetectionAction.position.toString());
     }
 }
