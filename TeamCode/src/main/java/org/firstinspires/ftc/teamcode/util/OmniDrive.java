@@ -10,6 +10,19 @@ public class OmniDrive {
     public DcMotor backLeft;
     public DcMotor backRight;
 
+    public enum Direction {
+        FORWARD,
+        LEFT,
+        RIGHT,
+        BACKWARD,
+        FORWARD_LEFT,
+        FORWARD_RIGHT,
+        BACKWARD_LEFT,
+        BACKWARD_RIGHT,
+        ROTATE_LEFT,
+        ROTATE_RIGHT
+    }
+
     public OmniDrive(DcMotor frontLeft, DcMotor frontRight,
                      DcMotor backLeft, DcMotor backRight) {
         this.frontLeft = frontLeft;

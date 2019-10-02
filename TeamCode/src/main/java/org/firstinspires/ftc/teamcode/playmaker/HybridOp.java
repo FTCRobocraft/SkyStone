@@ -1,0 +1,61 @@
+package org.firstinspires.ftc.teamcode.playmaker;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.robot.Robot;
+
+import org.firstinspires.ftc.teamcode.hardware.SkystoneRobotHardware;
+
+import java.lang.reflect.InvocationTargetException;
+
+public class HybridOp extends OpMode {
+
+    private GamepadController gamepadController;
+    private RobotHardware hardware;
+    private ActionExecutor actionExecutor;
+    private boolean isAutonomous = false;
+
+    public HybridOp(Class<? extends RobotHardware> hardwareClass) {
+        //Uh
+    }
+
+    @Override
+    public void init() {
+        hardware.initializeHardware();
+        gamepadController = new GamepadController(gamepad1, gamepad2);
+
+    }
+
+    @Override
+    public void loop() {
+        hardware.hardware_loop();
+        gamepadController.controllerLoop(isAutonomous);
+
+        if (isAutonomous) {
+            this.autonomous_loop();
+        } else {
+            this.teleop_loop();
+        }
+    }
+
+    public void executeActionSequence(ActionSequence sequence) {
+        this.actionExecutor = new ActionExecutor(false, false, sequence);
+        this.isAutonomous = true;
+    }
+
+    public void stopAutonomous() {
+        this.isAutonomous = false;
+        this.actionExecutor = null;
+    }
+
+    public void autonomous_loop() {
+        // The Action Executor will return true once it's done. Therefore, when it eventually
+        // is true, it'll set the isAutonomous variable to false, which will exit out of
+        // autonomous.
+        isAutonomous = !this.actionExecutor.loop();
+
+    }
+
+    public void teleop_loop() { }
+
+
+}

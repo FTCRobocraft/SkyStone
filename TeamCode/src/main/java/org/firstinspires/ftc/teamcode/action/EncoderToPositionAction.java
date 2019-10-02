@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.playmaker.Action;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 public class EncoderToPositionAction implements Action {
 
@@ -29,7 +31,7 @@ public class EncoderToPositionAction implements Action {
      * @param hardware
      */
     @Override
-    public void init(BaseHardware hardware) {
+    public void init(RobotHardware hardware) {
         motor = hardware.hardwareMap.dcMotor.get(this.name);
         previousRunMode = motor.getMode();
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -39,13 +41,13 @@ public class EncoderToPositionAction implements Action {
     }
 
     /**
-     * Function that is called for every iteration of the OpMode loop
+     * Function that is called for every iteration of the OpMode controllerLoop
      *
      * @param hardware
      * @return Return true when the action is complete.
      */
     @Override
-    public boolean doAction(BaseHardware hardware) {
+    public boolean doAction(RobotHardware hardware) {
         if (motor.isBusy() && runTime.milliseconds() < timeout) {
             motor.setPower(speed);
             hardware.telemetry.addData("ENCODER", String.format("%d -> %d",

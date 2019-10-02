@@ -32,18 +32,6 @@ public class BaseHardware extends OpMode {
 
 
     //region Enum
-    public enum Direction {
-        FORWARD,
-        LEFT,
-        RIGHT,
-        BACKWARD,
-        FORWARD_LEFT,
-        FORWARD_RIGHT,
-        BACKWARD_LEFT,
-        BACKWARD_RIGHT,
-        ROTATE_LEFT,
-        ROTATE_RIGHT
-    }
 
     public enum Team {
         RED,

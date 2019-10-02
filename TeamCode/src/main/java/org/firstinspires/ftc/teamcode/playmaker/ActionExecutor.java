@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode.playmaker;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.action.Action;
-import org.firstinspires.ftc.teamcode.hardware.SkyStoneHardware;
 
 import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.LABEL_GOLD_MINERAL;
 import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.LABEL_SILVER_MINERAL;
@@ -14,88 +12,88 @@ import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.TFOD
  * Created by djfigs1 on 11/18/16.
  */
 
-public class SkyStoneActionExecutor extends SkyStoneHardware {
+public class ActionExecutor {
 
     public ActionSequence actionSequence;
     public boolean initVuforia = false;
     public boolean initTFOD = false;
     public boolean enableFlashlight = true;
     private Action action = null;
+    private RobotHardware hardware;
 
-    @Override
+    public ActionExecutor(boolean useVuforia, boolean useTFOD, ActionSequence actionSequence) {
+        this.actionSequence = actionSequence;
+        this.initVuforia = useVuforia;
+        this.initTFOD = useTFOD;
+    }
+
     public void init() {
-        super.init();
-
         if (initVuforia) {
             VuforiaLocalizer.Parameters parameters;
             if (initTFOD) {
                 parameters = new VuforiaLocalizer.Parameters();
             } else {
-                int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                int cameraMonitorViewId = hardware.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardware.hardwareMap.appContext.getPackageName());
                 parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
             }
 
-            parameters.vuforiaLicenseKey = this.vulforiaKey;
+            parameters.vuforiaLicenseKey = hardware.vulforiaKey;
             parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-            this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
+            hardware.vuforia = ClassFactory.getInstance().createVuforia(parameters);
             com.vuforia.CameraDevice.getInstance().setFlashTorchMode(enableFlashlight);
         }
 
         if (initTFOD) {
-            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            int tfodMonitorViewId = hardware.hardwareMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", hardware.hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-            tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+            hardware.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, hardware.vuforia);
+            hardware.tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
         }
 
     }
 
-    @Override
     public void start() {
-        super.start();
         if (initTFOD) {
-            tfod.activate();
+            hardware.tfod.activate();
         }
 
     }
 
-    @Override
     public void stop() {
-
         if (initVuforia) {
             com.vuforia.CameraDevice.getInstance().setFlashTorchMode(false);
         }
         if (initTFOD) {
-            tfod.deactivate();
+            hardware.tfod.deactivate();
         }
     }
 
     int actionNumber = 1;
     boolean didInit = false;
 
-    @Override
-    public void loop() {
+    public boolean loop() {
         action = actionSequence.getCurrentAction();
 
         if (action != null) {
             if (!didInit) {
-                action.init(this);
+                action.init(hardware);
                 didInit = true;
             }
 
-            if (action.doAction(this)) {
+            if (action.doAction(hardware)) {
                 actionSequence.currentActionComplete();
                 action = actionSequence.getCurrentAction();
                 actionNumber++;
                 didInit = false;
             } else {
-                telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
+                hardware.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
                         (int) ((double) actionNumber / (double) actionSequence.numberOfActions() * 100.0));
-                telemetry.addData("Current Action", action.getClass().getSimpleName());
+                hardware.telemetry.addData("Current Action", action.getClass().getSimpleName());
             }
+            return false;
         } else {
-            requestOpModeStop();
+            return true;
         }
     }
 }

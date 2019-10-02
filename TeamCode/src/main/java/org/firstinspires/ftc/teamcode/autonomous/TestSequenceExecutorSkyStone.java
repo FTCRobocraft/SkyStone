@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.autonomous.sequences.TestSequence;
-import org.firstinspires.ftc.teamcode.util.SkyStoneActionExecutor;
+import org.firstinspires.ftc.teamcode.playmaker.ActionExecutor;
 
 /**
  * Created by djfigs1 on 1/20/18.
  */
 
 @Autonomous(name = "TestSequence")
-public class TestSequenceExecutorSkyStone extends SkyStoneActionExecutor {
+public class TestSequenceExecutorSkyStone extends ActionExecutor {
 
     TestSequence testSequence;
 

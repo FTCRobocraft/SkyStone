@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.action;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.playmaker.Action;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 public class WaitForeverAction implements Action {
 
@@ -11,18 +13,18 @@ public class WaitForeverAction implements Action {
      * @param hardware
      */
     @Override
-    public void init(BaseHardware hardware) {
+    public void init(RobotHardware hardware) {
 
     }
 
     /**
-     * Function that is called for every iteration of the OpMode loop
+     * Function that is called for every iteration of the OpMode controllerLoop
      *
      * @param hardware
      * @return Return true when the action is complete.
      */
     @Override
-    public boolean doAction(BaseHardware hardware) {
+    public boolean doAction(RobotHardware hardware) {
         return false;
     }
 }
