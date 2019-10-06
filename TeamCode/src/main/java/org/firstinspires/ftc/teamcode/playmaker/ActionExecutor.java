@@ -33,7 +33,7 @@ public class ActionExecutor {
             if (initTFOD) {
                 parameters = new VuforiaLocalizer.Parameters();
             } else {
-                int cameraMonitorViewId = hardware.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardware.hardwareMap.appContext.getPackageName());
+                int cameraMonitorViewId = hardware.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardware.opMode.hardwareMap.appContext.getPackageName());
                 parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
             }
 
@@ -44,8 +44,8 @@ public class ActionExecutor {
         }
 
         if (initTFOD) {
-            int tfodMonitorViewId = hardware.hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardware.hardwareMap.appContext.getPackageName());
+            int tfodMonitorViewId = hardware.opMode.hardwareMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", hardware.opMode.hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
             hardware.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, hardware.vuforia);
             hardware.tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
@@ -87,9 +87,9 @@ public class ActionExecutor {
                 actionNumber++;
                 didInit = false;
             } else {
-                hardware.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
+                hardware.opMode.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
                         (int) ((double) actionNumber / (double) actionSequence.numberOfActions() * 100.0));
-                hardware.telemetry.addData("Current Action", action.getClass().getSimpleName());
+                hardware.opMode.telemetry.addData("Current Action", action.getClass().getSimpleName());
             }
             return false;
         } else {

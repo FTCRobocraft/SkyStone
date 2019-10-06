@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.action;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
@@ -32,7 +31,7 @@ public class EncoderToPositionAction implements Action {
      */
     @Override
     public void init(RobotHardware hardware) {
-        motor = hardware.hardwareMap.dcMotor.get(this.name);
+        motor = hardware.opMode.hardwareMap.dcMotor.get(this.name);
         previousRunMode = motor.getMode();
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setTargetPosition(motor.getCurrentPosition() + position);
@@ -50,7 +49,7 @@ public class EncoderToPositionAction implements Action {
     public boolean doAction(RobotHardware hardware) {
         if (motor.isBusy() && runTime.milliseconds() < timeout) {
             motor.setPower(speed);
-            hardware.telemetry.addData("ENCODER", String.format("%d -> %d",
+            hardware.opMode.telemetry.addData("ENCODER", String.format("%d -> %d",
                     motor.getCurrentPosition(),
                     motor.getTargetPosition()));
         } else {

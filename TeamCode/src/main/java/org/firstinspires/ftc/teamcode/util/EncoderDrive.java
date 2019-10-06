@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.util;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 /**
@@ -175,10 +174,10 @@ public class EncoderDrive {
                 omniDrive.backLeft.setPower(BL_speed);
                 omniDrive.backRight.setPower(BR_speed);
 
-                hardware.telemetry.addData("FL", String.format("%d -> %d", omniDrive.frontLeft.getCurrentPosition(), omniDrive.frontLeft.getTargetPosition()));
-                hardware.telemetry.addData("FR", String.format("%d -> %d", omniDrive.frontRight.getCurrentPosition(), omniDrive.frontRight.getTargetPosition()));
-                hardware.telemetry.addData("BL", String.format("%d -> %d", omniDrive.backLeft.getCurrentPosition(), omniDrive.backLeft.getTargetPosition()));
-                hardware.telemetry.addData("BR", String.format("%d -> %d", omniDrive.backRight.getCurrentPosition(), omniDrive.backRight.getTargetPosition()));
+                hardware.opMode.telemetry.addData("FL", String.format("%d -> %d", omniDrive.frontLeft.getCurrentPosition(), omniDrive.frontLeft.getTargetPosition()));
+                hardware.opMode.telemetry.addData("FR", String.format("%d -> %d", omniDrive.frontRight.getCurrentPosition(), omniDrive.frontRight.getTargetPosition()));
+                hardware.opMode.telemetry.addData("BL", String.format("%d -> %d", omniDrive.backLeft.getCurrentPosition(), omniDrive.backLeft.getTargetPosition()));
+                hardware.opMode.telemetry.addData("BR", String.format("%d -> %d", omniDrive.backRight.getCurrentPosition(), omniDrive.backRight.getTargetPosition()));
             } else {
                 isBusy = false;
                 omniDrive.stopDrive();

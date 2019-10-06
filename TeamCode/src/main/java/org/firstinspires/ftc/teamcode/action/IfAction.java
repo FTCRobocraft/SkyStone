@@ -41,9 +41,9 @@ public class IfAction implements Action {
                 action.init(hardware);
                 actionNumber++;
             } else {
-                hardware.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, execSequence.numberOfActions(),
+                hardware.opMode.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, execSequence.numberOfActions(),
                         (int) ((double) actionNumber / (double) execSequence.numberOfActions() * 100.0));
-                hardware.telemetry.addData("Current Action", action.getClass().getSimpleName());
+                hardware.opMode.telemetry.addData("Current Action", action.getClass().getSimpleName());
             }
         } else {
             return true;

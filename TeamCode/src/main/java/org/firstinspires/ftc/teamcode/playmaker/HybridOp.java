@@ -9,20 +9,15 @@ import java.lang.reflect.InvocationTargetException;
 
 public class HybridOp extends OpMode {
 
-    private GamepadController gamepadController;
-    private RobotHardware hardware;
+    public GamepadController gamepadController;
+    public RobotHardware hardware;
     private ActionExecutor actionExecutor;
     private boolean isAutonomous = false;
-
-    public HybridOp(Class<? extends RobotHardware> hardwareClass) {
-        //Uh
-    }
 
     @Override
     public void init() {
         hardware.initializeHardware();
         gamepadController = new GamepadController(gamepad1, gamepad2);
-
     }
 
     @Override
@@ -35,6 +30,10 @@ public class HybridOp extends OpMode {
         } else {
             this.teleop_loop();
         }
+    }
+
+    public boolean isAutonomous() {
+        return isAutonomous;
     }
 
     public void executeActionSequence(ActionSequence sequence) {

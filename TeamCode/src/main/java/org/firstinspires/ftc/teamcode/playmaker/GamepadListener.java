@@ -3,17 +3,17 @@ package org.firstinspires.ftc.teamcode.playmaker;
 public class GamepadListener {
 
     enum GamepadListenerType {
-        TOGGLE,
+        HOLD_RELEASE,
         PRESS,
+        TOGGLE,
         AUTO_TRIGGER
     }
 
     public GamepadController.GamepadType type;
     public GamepadController.GamepadButtons button;
     private GamepadListenerType listenerType;
-
-    public GamepadInterface onActivateInterface;
-    public GamepadInterface onDeactivateInterface;
+    public GamepadInterface activateInterface;
+    public GamepadInterface deactivateInterface;
 
     private GamepadListener(GamepadListenerType type, GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button) {
         this.listenerType = type;
@@ -21,24 +21,35 @@ public class GamepadListener {
         this.button = button;
     }
 
-    public static GamepadListener createPressListener(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, GamepadInterface onActivateInterface, GamepadInterface onDeactivateInterface) {
-        GamepadListener listener = new GamepadListener(GamepadListenerType.PRESS, gamepadType, button);
-        listener.onActivateInterface = onActivateInterface;
-        listener.onDeactivateInterface = onDeactivateInterface;
+    public static GamepadListener createHoldAndReleaseListener(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, GamepadInterface activateInterface, GamepadInterface deactivateInterface) {
+        GamepadListener listener = new GamepadListener(GamepadListenerType.HOLD_RELEASE, gamepadType, button);
+        listener.activateInterface = activateInterface;
+        listener.deactivateInterface = deactivateInterface;
         return listener;
     }
 
-    public static GamepadListener createToggleListener(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, GamepadInterface onActivateInterface, GamepadInterface onDeactivateInterface) {
+    public static GamepadListener createPressListener(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, GamepadInterface gamepadInterface) {
+        GamepadListener listener = new GamepadListener(GamepadListenerType.PRESS, gamepadType, button);
+        listener.activateInterface = gamepadInterface;
+        return listener;
+    }
+
+    public static GamepadListener createToggleListener(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, GamepadInterface activateInterface, GamepadInterface deactivateInterface) {
         GamepadListener listener = new GamepadListener(GamepadListenerType.TOGGLE, gamepadType, button);
-        listener.onActivateInterface = onActivateInterface;
-        listener.onDeactivateInterface = onDeactivateInterface;
+        listener.activateInterface = activateInterface;
+        listener.deactivateInterface = deactivateInterface;
         return listener;
     }
 
     public static GamepadListener createAutoTrigger(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, HybridOp hybridOp, ActionSequence sequence) {
         GamepadListener listener = new GamepadListener(GamepadListenerType.AUTO_TRIGGER, gamepadType, button);
-        listener.onActivateInterface = () -> hybridOp.executeActionSequence(sequence);
-        listener.onDeactivateInterface = () -> hybridOp.stopAutonomous();
+        listener.activateInterface = () -> {
+            if (hybridOp.isAutonomous()) {
+                hybridOp.stopAutonomous();
+            } else {
+                hybridOp.executeActionSequence(sequence);
+            }
+        };
         return listener;
     }
 
