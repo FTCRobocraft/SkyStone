@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.action;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
-import org.firstinspires.ftc.teamcode.util.ActionSequence;
+import org.firstinspires.ftc.teamcode.playmaker.Action;
+import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 public class IfAction implements Action {
 
@@ -19,7 +20,7 @@ public class IfAction implements Action {
         this.falseSequence = falseSequence;
     }
 
-    public void init(BaseHardware hardware) {
+    public void init(RobotHardware hardware) {
         if (condition.evaluate(hardware)) {
             execSequence = trueSequence;
         } else {
@@ -27,7 +28,7 @@ public class IfAction implements Action {
         }
     }
 
-    public boolean doAction(BaseHardware hardware) {
+    public boolean doAction(RobotHardware hardware) {
         if (execSequence == null) {
             return true;
         }
@@ -40,9 +41,9 @@ public class IfAction implements Action {
                 action.init(hardware);
                 actionNumber++;
             } else {
-                hardware.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, execSequence.numberOfActions(),
+                hardware.opMode.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, execSequence.numberOfActions(),
                         (int) ((double) actionNumber / (double) execSequence.numberOfActions() * 100.0));
-                hardware.telemetry.addData("Current Action", action.getClass().getSimpleName());
+                hardware.opMode.telemetry.addData("Current Action", action.getClass().getSimpleName());
             }
         } else {
             return true;

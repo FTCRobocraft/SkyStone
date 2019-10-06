@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.action;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.playmaker.Action;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.EncoderDrive;
+import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 /**
  * Created by djfigs1 on 10/1/17.
@@ -21,18 +23,20 @@ public class MecanumRotationAction implements Action {
         this.speed = speed;
     }
 
-    public void init(BaseHardware hardware) {
+    @Override
+    public void init(RobotHardware hardware) {
         double distance = INCHES_PER_DEGREE * degrees;
         encoderDrive = new EncoderDrive(hardware.omniDrive);
         if (distance < 0) {
             distance = -distance;
-            encoderDrive.setInchesToDrive(BaseHardware.Direction.ROTATE_LEFT, distance, speed, 1500);
+            encoderDrive.setInchesToDrive(OmniDrive.Direction.ROTATE_LEFT, distance, speed, 1500);
         } else {
-            encoderDrive.setInchesToDrive(BaseHardware.Direction.ROTATE_RIGHT, distance, speed, 1500);
+            encoderDrive.setInchesToDrive(OmniDrive.Direction.ROTATE_RIGHT, distance, speed, 1500);
         }
     }
 
-    public boolean doAction(BaseHardware hardware) {
+    @Override
+    public boolean doAction(RobotHardware hardware) {
         encoderDrive.run(hardware);
         return !encoderDrive.isBusy;
     }

@@ -1,29 +1,22 @@
-package org.firstinspires.ftc.teamcode.action;
+package org.firstinspires.ftc.teamcode.playmaker;
 
-import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-public class WaitForeverAction implements Action {
-
+/**
+ * Created by djfigs1 on 11/18/16.
+ */
+public interface Action {
 
     /**
      * Function called when the action is first executed
-     *
      * @param hardware
      */
-    @Override
-    public void init(RobotHardware hardware) {
-
-    }
+    void init(RobotHardware hardware);
 
     /**
      * Function that is called for every iteration of the OpMode controllerLoop
-     *
      * @param hardware
      * @return Return true when the action is complete.
      */
-    @Override
-    public boolean doAction(RobotHardware hardware) {
-        return false;
-    }
+    boolean doAction(RobotHardware hardware);
 }

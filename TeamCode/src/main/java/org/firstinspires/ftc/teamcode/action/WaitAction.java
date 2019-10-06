@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.action;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.playmaker.Action;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 /**
  * Created by djfig on 12/12/2016.
@@ -18,12 +19,12 @@ public class WaitAction implements Action {
     }
 
     @Override
-    public void init(BaseHardware hardware) {
+    public void init(RobotHardware hardware) {
         endTime = System.currentTimeMillis() + time;
     }
 
     @Override
-    public boolean doAction(BaseHardware hardware){
+    public boolean doAction(RobotHardware hardware){
         return (System.currentTimeMillis() >= endTime);
     }
 }

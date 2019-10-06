@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 /**
  * Created by djfigs1 on 9/30/17. not really
@@ -23,7 +23,7 @@ public class EncoderDrive {
     public boolean isBusy = false;
 
     private double inchesToDrive;
-    private BaseHardware.Direction direction;
+    private OmniDrive.Direction direction;
     private DcMotor.RunMode previousRunMode;
     private double timeout;
     private ElapsedTime runTime;
@@ -46,9 +46,9 @@ public class EncoderDrive {
         double distance = INCHES_PER_DEGREE * degrees;
         if (distance < 0) {
             distance = -distance;
-            setInchesToDrive(BaseHardware.Direction.ROTATE_LEFT, distance, speed, timeout);
+            setInchesToDrive(OmniDrive.Direction.ROTATE_LEFT, distance, speed, timeout);
         } else {
-            setInchesToDrive(BaseHardware.Direction.ROTATE_RIGHT, distance, speed, timeout);
+            setInchesToDrive(OmniDrive.Direction.ROTATE_RIGHT, distance, speed, timeout);
         }
     }
 
@@ -59,7 +59,8 @@ public class EncoderDrive {
      * @param power How much power is applied to each motor (0 -> 1)
      * @param timeout Timeout in case something should go wrong
      */
-    public void setInchesToDrive(BaseHardware.Direction direction, double distance, float power, double timeout) {
+
+    public void setInchesToDrive(OmniDrive.Direction direction, double distance, float power, double timeout) {
         this.inchesToDrive = distance;
         this.isBusy = true;
         this.timeout = timeout;
@@ -162,7 +163,7 @@ public class EncoderDrive {
         omniDrive.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void run(BaseHardware hardware) {
+    public void run(RobotHardware hardware) {
         if (this.isBusy) {
             boolean busy = omniDrive.frontLeft.isBusy() || omniDrive.frontRight.isBusy()
                     || omniDrive.backLeft.isBusy() || omniDrive.backRight.isBusy();
@@ -173,10 +174,10 @@ public class EncoderDrive {
                 omniDrive.backLeft.setPower(BL_speed);
                 omniDrive.backRight.setPower(BR_speed);
 
-                hardware.telemetry.addData("FL", String.format("%d -> %d", omniDrive.frontLeft.getCurrentPosition(), omniDrive.frontLeft.getTargetPosition()));
-                hardware.telemetry.addData("FR", String.format("%d -> %d", omniDrive.frontRight.getCurrentPosition(), omniDrive.frontRight.getTargetPosition()));
-                hardware.telemetry.addData("BL", String.format("%d -> %d", omniDrive.backLeft.getCurrentPosition(), omniDrive.backLeft.getTargetPosition()));
-                hardware.telemetry.addData("BR", String.format("%d -> %d", omniDrive.backRight.getCurrentPosition(), omniDrive.backRight.getTargetPosition()));
+                hardware.opMode.telemetry.addData("FL", String.format("%d -> %d", omniDrive.frontLeft.getCurrentPosition(), omniDrive.frontLeft.getTargetPosition()));
+                hardware.opMode.telemetry.addData("FR", String.format("%d -> %d", omniDrive.frontRight.getCurrentPosition(), omniDrive.frontRight.getTargetPosition()));
+                hardware.opMode.telemetry.addData("BL", String.format("%d -> %d", omniDrive.backLeft.getCurrentPosition(), omniDrive.backLeft.getTargetPosition()));
+                hardware.opMode.telemetry.addData("BR", String.format("%d -> %d", omniDrive.backRight.getCurrentPosition(), omniDrive.backRight.getTargetPosition()));
             } else {
                 isBusy = false;
                 omniDrive.stopDrive();
