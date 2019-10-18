@@ -50,4 +50,14 @@ public class IfAction implements Action {
         }
         return false;
     }
+
+    @Override
+    public Double progress() {
+        return null;
+    }
+
+    @Override
+    public String progressString() {
+        return null;
+    }
 }

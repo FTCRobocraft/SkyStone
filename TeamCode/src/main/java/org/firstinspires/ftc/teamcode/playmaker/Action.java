@@ -19,4 +19,10 @@ public interface Action {
      * @return Return true when the action is complete.
      */
     boolean doAction(RobotHardware hardware);
+
+    Double progress();
+
+    String progressString();
+
+
 }

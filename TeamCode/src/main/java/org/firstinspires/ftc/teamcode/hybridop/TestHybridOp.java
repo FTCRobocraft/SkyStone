@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.hybridop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.action.WaitAction;
 import org.firstinspires.ftc.teamcode.hardware.TestHardware;
+import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadController;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadListener;
 import org.firstinspires.ftc.teamcode.playmaker.HybridOp;
@@ -26,5 +28,8 @@ public class TestHybridOp extends HybridOp {
             testHardware.leftMotor.setPower(0);
             testHardware.rightMotor.setPower(0);
         }));
+
+        ActionSequence testSequence = new ActionSequence(new WaitAction(5000));
+        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.b, this, testSequence));
     }
 }

@@ -17,6 +17,7 @@ public class HybridOp extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("Autonomous", isAutonomous);
         hardware.hardware_loop();
         gamepadController.controllerLoop(isAutonomous);
 
@@ -32,7 +33,8 @@ public class HybridOp extends OpMode {
     }
 
     public void executeActionSequence(ActionSequence sequence) {
-        this.actionExecutor = new ActionExecutor(false, false, sequence);
+        this.actionExecutor = new ActionExecutor(hardware, sequence);
+        this.actionExecutor.init();
         this.isAutonomous = true;
     }
 

@@ -40,4 +40,14 @@ public class MecanumRotationAction implements Action {
         encoderDrive.run(hardware);
         return !encoderDrive.isBusy;
     }
+
+    @Override
+    public Double progress() {
+        return null;
+    }
+
+    @Override
+    public String progressString() {
+        return null;
+    }
 }

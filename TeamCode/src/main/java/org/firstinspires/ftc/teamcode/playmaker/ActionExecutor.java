@@ -21,13 +21,14 @@ public class ActionExecutor {
     private Action action = null;
     private RobotHardware hardware;
 
-    public ActionExecutor(boolean useVuforia, boolean useTFOD, ActionSequence actionSequence) {
+    public ActionExecutor(RobotHardware hardware, ActionSequence actionSequence) {
+        this.hardware = hardware;
         this.actionSequence = actionSequence;
-        this.initVuforia = useVuforia;
-        this.initTFOD = useTFOD;
     }
 
     public void init() {
+        this.actionSequence.initializeSequence();
+
         if (initVuforia) {
             VuforiaLocalizer.Parameters parameters;
             if (initTFOD) {
@@ -83,13 +84,19 @@ public class ActionExecutor {
 
             if (action.doAction(hardware)) {
                 actionSequence.currentActionComplete();
-                action = actionSequence.getCurrentAction();
                 actionNumber++;
                 didInit = false;
             } else {
-                hardware.opMode.telemetry.addData("Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
+                hardware.opMode.telemetry.addData("Sequence Progress", "%d/%d, %d%%", actionNumber, actionSequence.numberOfActions(),
                         (int) ((double) actionNumber / (double) actionSequence.numberOfActions() * 100.0));
                 hardware.opMode.telemetry.addData("Current Action", action.getClass().getSimpleName());
+                if (action.progress() != null) {
+                    hardware.opMode.telemetry.addData("Action %", "%.2f%%", action.progress()*100.0);
+                }
+
+                if (action.progressString() != null) {
+                    hardware.opMode.telemetry.addData("Action Progress", action.progressString());
+                }
             }
             return false;
         } else {

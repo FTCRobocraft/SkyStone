@@ -42,4 +42,14 @@ public class MecanumMoveAction implements Action {
         driver.run(hardware);
         return !driver.isBusy;
     }
+
+    @Override
+    public Double progress() {
+        return null;
+    }
+
+    @Override
+    public String progressString() {
+        return null;
+    }
 }

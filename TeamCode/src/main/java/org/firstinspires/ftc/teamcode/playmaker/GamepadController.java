@@ -100,7 +100,7 @@ public class GamepadController {
                             if (!autonomousMode && isOneFirstPress) listenerOne.activateInterface.execute();
                             break;
                         case AUTO_TRIGGER:
-                            if (one) listenerOne.activateInterface.execute();
+                            if (isOneFirstPress) listenerOne.activateInterface.execute();
                             break;
                         case HOLD_RELEASE:
                             if (!autonomousMode && one) {
@@ -128,7 +128,7 @@ public class GamepadController {
                             if (!autonomousMode && isTwoFirstPress) listenerTwo.activateInterface.execute();
                             break;
                         case AUTO_TRIGGER:
-                            if (two) listenerTwo.activateInterface.execute();
+                            if (isTwoFirstPress) listenerTwo.activateInterface.execute();
                             break;
                         case HOLD_RELEASE:
                             if (!autonomousMode && two) {

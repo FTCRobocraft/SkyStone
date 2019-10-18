@@ -19,6 +19,10 @@ public class ActionSequence {
         }
     }
 
+    public void initializeSequence() {
+        currentPosition = 0;
+    }
+
     public ActionSequence(List<Action> actions) {
         this.actions = actions;
     }

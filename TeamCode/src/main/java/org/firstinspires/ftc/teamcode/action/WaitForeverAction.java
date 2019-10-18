@@ -26,4 +26,14 @@ public class WaitForeverAction implements Action {
     public boolean doAction(RobotHardware hardware) {
         return false;
     }
+
+    @Override
+    public Double progress() {
+        return 0.0;
+    }
+
+    @Override
+    public String progressString() {
+        return "Will never complete!";
+    }
 }
