@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.playmaker.GamepadListener;
 import org.firstinspires.ftc.teamcode.playmaker.HybridOp;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
-@TeleOp(name="Spinner", group="HybridOp")
+@TeleOp(name="ManualDrive", group="HybridOp")
 public class TestHybridOp extends HybridOp {
 
     OmniDrive omniDrive;
@@ -25,7 +25,6 @@ public class TestHybridOp extends HybridOp {
     public void init() {
         super.init();
         TestHardware testHardware = (TestHardware) this.hardware;
-        omniDrive = (OmniDrive) this.omniDrive;
 
         /*
         gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.a, () -> {
