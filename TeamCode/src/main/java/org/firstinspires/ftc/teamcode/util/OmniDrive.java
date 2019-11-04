@@ -112,7 +112,7 @@ public class OmniDrive {
             stopDrive();
         } else {
             if (x == 0) {
-                moveForward(y);
+                moveForward(-y);
             } else if (y == 0) {
                 if (x > 0) {
                     moveRight(x);
@@ -120,31 +120,31 @@ public class OmniDrive {
                     moveLeft(x);
                 }
             } else {
-                if (x > 0 && y > 0) {
+                if (x > 0 && -y > 0) {
                     // QUAD I
                     frontLeft.setPower(power);
                     frontRight.setPower(directionPower);
                     backLeft.setPower(directionPower);
                     backRight.setPower(power);
-                } else if (x < 0 && y > 0) {
+                } else if (x < 0 && -y > 0) {
                     // QUAD 2
-                    frontLeft.setPower(directionPower);
-                    frontRight.setPower(-power);
-                    backLeft.setPower(-power);
-                    backRight.setPower(directionPower);
-                } else if (x < 0 && y < 0) {
-                    // QUAD 3
-                    frontLeft.setPower(-power);
-                    frontRight.setPower(directionPower);
-                    backLeft.setPower(directionPower);
-                    backRight.setPower(-power);
-
-                } else {
-                    // QUAD 4
                     frontLeft.setPower(directionPower);
                     frontRight.setPower(power);
                     backLeft.setPower(power);
                     backRight.setPower(directionPower);
+                } else if (x < 0 && -y < 0) {
+                    // QUAD 3
+                    frontLeft.setPower(-power);
+                    frontRight.setPower(-directionPower);
+                    backLeft.setPower(-directionPower);
+                    backRight.setPower(-power);
+
+                } else {
+                    // QUAD 4
+                    frontLeft.setPower(power);
+                    frontRight.setPower(directionPower);
+                    backLeft.setPower(directionPower);
+                    backRight.setPower(power);
                 }
 
             }

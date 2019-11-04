@@ -8,13 +8,14 @@ import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadController;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadListener;
 import org.firstinspires.ftc.teamcode.playmaker.HybridOp;
+import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 @TeleOp(name="Spinner", group="HybridOp")
 public class TestHybridOp extends HybridOp {
 
-    public TestHybridOp() {
-        super();
-        this.hardware = new TestHardware(this);
+    @Override
+    public RobotHardware getHardware() {
+        return new TestHardware(this);
     }
 
     @Override

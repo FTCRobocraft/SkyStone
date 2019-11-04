@@ -2,15 +2,18 @@ package org.firstinspires.ftc.teamcode.playmaker;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-public class HybridOp extends OpMode {
+public abstract class HybridOp extends OpMode {
 
     public GamepadController gamepadController;
     public RobotHardware hardware;
     private ActionExecutor actionExecutor;
     private boolean isAutonomous = false;
 
+    public abstract RobotHardware getHardware();
+
     @Override
     public void init() {
+        hardware = getHardware();
         hardware.initializeHardware();
         gamepadController = new GamepadController(gamepad1, gamepad2);
     }
@@ -19,6 +22,7 @@ public class HybridOp extends OpMode {
     public void loop() {
         telemetry.addData("Autonomous", isAutonomous);
         hardware.hardware_loop();
+        hybrid_loop();
         gamepadController.controllerLoop(isAutonomous);
 
         if (isAutonomous) {
@@ -41,6 +45,10 @@ public class HybridOp extends OpMode {
     public void stopAutonomous() {
         this.isAutonomous = false;
         this.actionExecutor = null;
+    }
+
+    public void hybrid_loop() {
+
     }
 
     public void autonomous_loop() {
