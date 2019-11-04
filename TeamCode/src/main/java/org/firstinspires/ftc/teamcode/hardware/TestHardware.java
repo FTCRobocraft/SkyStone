@@ -4,11 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class TestHardware extends RobotHardware {
 
-    public DcMotor leftMotor;
-    public DcMotor rightMotor;
+    public DcMotor frontLeft;
+    public DcMotor frontRight;
+    public DcMotor backLeft;
+    public DcMotor backRight;
 
     public TestHardware(OpMode opMode) {
         super(opMode);
@@ -16,7 +19,10 @@ public class TestHardware extends RobotHardware {
 
     @Override
     public void initializeHardware() {
-        leftMotor = initializeDevice(DcMotor.class, "leftMotor");
-        rightMotor = initializeDevice(DcMotor.class, "rightMotor");
+        frontLeft = initializeDevice(DcMotor.class, "frontLeft");
+        frontRight = initializeDevice(DcMotor.class, "frontRight");
+        backLeft = initializeDevice(DcMotor.class, "backLeft");
+        backRight = initializeDevice(DcMotor.class, "frontRight");
+        omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
     }
 }

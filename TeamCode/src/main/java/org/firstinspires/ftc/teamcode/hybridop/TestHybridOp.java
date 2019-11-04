@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.playmaker.GamepadListener;
 import org.firstinspires.ftc.teamcode.playmaker.HybridOp;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-@TeleOp(name="Spinner", group="HybridOp")
+@TeleOp(name="ManualDrive", group="HybridOp")
 public class TestHybridOp extends HybridOp {
 
     @Override
@@ -18,19 +18,32 @@ public class TestHybridOp extends HybridOp {
         return new TestHardware(this);
     }
 
+
     @Override
     public void init() {
         super.init();
         TestHardware testHardware = (TestHardware) this.hardware;
-        gamepadController.addGamepadListener(GamepadListener.createToggleListener(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.a, () -> {
-            testHardware.leftMotor.setPower(-1);
-            testHardware.rightMotor.setPower(1);
-        }, () -> {
+
+        /*
+        gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.a, () -> {
+            testHardware.leftMotor.setPower(1);
+        }, ()-> {
             testHardware.leftMotor.setPower(0);
-            testHardware.rightMotor.setPower(0);
         }));
 
-        ActionSequence testSequence = new ActionSequence(new WaitAction(5000));
-        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.b, this, testSequence));
+        gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(GamepadController.GamepadType.ONE, GamepadController.GamepadButtons.b, () -> {
+            testHardware.leftMotor.setPower(-1);
+        }, ()-> {
+            testHardware.leftMotor.setPower(0);
+        }));
+        */
+
+    }
+
+    @Override
+    public void loop() {
+
+        omniDrive.circleMove(gamepad1.left_stick_x, gamepad1.left_stick_y);
+
     }
 }
