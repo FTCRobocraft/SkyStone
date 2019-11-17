@@ -4,10 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.CameraNavigation;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class SkyStoneRobotHardware extends RobotHardware {
+
+    public static final float CAM_X_DISPLACEMENT = 0f;
+    public static final float CAM_Y_DISPLACEMENT = 0f;
+    public static final float CAM_Z_DISPLACEMENT = 0f;
 
     // Four main motors
     public DcMotor frontLeft;
@@ -21,6 +29,10 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     // Lift motors
     public DcMotor liftMotor;
+
+    // Cameras
+    public WebcamName webcam;
+    public CameraNavigation cameraNavigation;
 
 
 
@@ -39,8 +51,20 @@ public class SkyStoneRobotHardware extends RobotHardware {
         spinnerLeft = initializeDevice(DcMotor.class, "spinnerLeft");
         spinnerRight = initializeDevice(DcMotor.class, "spinnerRight");
         liftMotor = initializeDevice(DcMotor.class, "liftMotor");
+        webcam = initializeDevice(WebcamName.class, "Webcam 1");
 
         spinnerRight.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
+    }
+
+    public void initVuforia() {
+        // USB Camera Setup
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = RobotHardware.vuforiaKey;
+        parameters.cameraName = webcam;
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        cameraNavigation = new CameraNavigation(this, CAM_X_DISPLACEMENT, CAM_Y_DISPLACEMENT, CAM_Z_DISPLACEMENT);
     }
 }

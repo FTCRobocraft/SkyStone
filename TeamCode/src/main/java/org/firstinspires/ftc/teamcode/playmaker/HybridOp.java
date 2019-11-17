@@ -15,6 +15,7 @@ public abstract class HybridOp extends OpMode {
     public void init() {
         hardware = getHardware();
         hardware.initializeHardware();
+        hardware.initializeTeleOp();
         gamepadController = new GamepadController(gamepad1, gamepad2);
     }
 

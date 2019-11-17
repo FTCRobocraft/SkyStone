@@ -38,7 +38,7 @@ public class ActionExecutor {
                 parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
             }
 
-            parameters.vuforiaLicenseKey = hardware.vulforiaKey;
+            parameters.vuforiaLicenseKey = hardware.vuforiaKey;
             parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
             hardware.vuforia = ClassFactory.getInstance().createVuforia(parameters);
             com.vuforia.CameraDevice.getInstance().setFlashTorchMode(enableFlashlight);
