@@ -42,8 +42,6 @@ public class TestHybridOp extends HybridOp {
 
     @Override
     public void loop() {
-
-        omniDrive.circleMove(gamepad1.left_stick_x, gamepad1.left_stick_y);
-
+        this.hardware.omniDrive.circleMove(gamepad1.left_stick_x, gamepad1.left_stick_y);
     }
 }
