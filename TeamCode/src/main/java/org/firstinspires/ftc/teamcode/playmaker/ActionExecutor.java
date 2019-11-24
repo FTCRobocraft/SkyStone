@@ -15,9 +15,6 @@ import static org.firstinspires.ftc.robotcore.external.tfod.TfodRoverRuckus.TFOD
 public class ActionExecutor {
 
     public ActionSequence actionSequence;
-    public boolean initVuforia = false;
-    public boolean initTFOD = false;
-    public boolean enableFlashlight = true;
     private Action action = null;
     private RobotHardware hardware;
 
@@ -28,46 +25,11 @@ public class ActionExecutor {
 
     public void init() {
         this.actionSequence.initializeSequence();
-
-        if (initVuforia) {
-            VuforiaLocalizer.Parameters parameters;
-            if (initTFOD) {
-                parameters = new VuforiaLocalizer.Parameters();
-            } else {
-                int cameraMonitorViewId = hardware.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardware.opMode.hardwareMap.appContext.getPackageName());
-                parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-            }
-
-            parameters.vuforiaLicenseKey = hardware.vuforiaKey;
-            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-            hardware.vuforia = ClassFactory.getInstance().createVuforia(parameters);
-            com.vuforia.CameraDevice.getInstance().setFlashTorchMode(enableFlashlight);
-        }
-
-        if (initTFOD) {
-            int tfodMonitorViewId = hardware.opMode.hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardware.opMode.hardwareMap.appContext.getPackageName());
-            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            hardware.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, hardware.vuforia);
-            hardware.tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-        }
-
     }
 
-    public void start() {
-        if (initTFOD) {
-            hardware.tfod.activate();
-        }
-
-    }
 
     public void stop() {
-        if (initVuforia) {
-            com.vuforia.CameraDevice.getInstance().setFlashTorchMode(false);
-        }
-        if (initTFOD) {
-            hardware.tfod.deactivate();
-        }
+
     }
 
     int actionNumber = 1;

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
-import org.firstinspires.ftc.teamcode.util.CameraNavigation;
+import org.firstinspires.ftc.teamcode.util.SkystoneNavigation;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class SkyStoneRobotHardware extends RobotHardware {
@@ -32,7 +32,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     // Cameras
     public WebcamName webcam;
-    public CameraNavigation cameraNavigation;
+    public SkystoneNavigation cameraNavigation;
 
 
 
@@ -65,6 +65,6 @@ public class SkyStoneRobotHardware extends RobotHardware {
         parameters.vuforiaLicenseKey = RobotHardware.vuforiaKey;
         parameters.cameraName = webcam;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        cameraNavigation = new CameraNavigation(this, CAM_X_DISPLACEMENT, CAM_Y_DISPLACEMENT, CAM_Z_DISPLACEMENT);
+        cameraNavigation = new SkystoneNavigation(this, CAM_X_DISPLACEMENT, CAM_Y_DISPLACEMENT, CAM_Z_DISPLACEMENT);
     }
 }

@@ -29,4 +29,5 @@ public class SkystoneHybridOp extends HybridOp {
     public void teleop_loop() {
         this.hardware.omniDrive.dpadMove(gamepad1, DPAD_POWER, false);
     }
+
 }

@@ -21,11 +21,6 @@ public abstract class AutonomousExecutor extends OpMode {
     }
 
     @Override
-    public void start() {
-        actionExecutor.start();
-    }
-
-    @Override
     public void loop() {
         actionExecutor.loop();
     }

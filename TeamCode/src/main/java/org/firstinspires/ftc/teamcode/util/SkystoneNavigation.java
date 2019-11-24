@@ -19,7 +19,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
-public class CameraNavigation {
+public class SkystoneNavigation {
 
     RobotHardware robotHardware;
     ArrayList<VuforiaTrackable> trackables;
@@ -49,7 +49,7 @@ public class CameraNavigation {
 
 
 
-    public CameraNavigation(RobotHardware robotHardware, float xDisplacement, float yDisplacement, float zDisplacement) {
+    public SkystoneNavigation(RobotHardware robotHardware, float xDisplacement, float yDisplacement, float zDisplacement) {
         this.robotHardware = robotHardware;
         this.xDisplacement = xDisplacement;
         this.yDisplacement = yDisplacement;
