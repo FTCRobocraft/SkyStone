@@ -16,6 +16,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public static final float CAM_X_DISPLACEMENT = 0f;
     public static final float CAM_Y_DISPLACEMENT = 0f;
     public static final float CAM_Z_DISPLACEMENT = 0f;
+    public static final float CAM_X_ROTATION = 0f;
+    public static final float CAM_Y_ROTATION = -90f;
+    public static final float CAM_Z_ROTATION = 0f;
 
     // Four main motors
     public DcMotor frontLeft;
@@ -33,6 +36,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     // Cameras
     public WebcamName webcam;
     public SkystoneNavigation cameraNavigation;
+    boolean isTracking = false;
 
 
 
@@ -42,6 +46,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     @Override
     public void initializeHardware() {
+        webcam = initializeDevice(WebcamName.class, "Webcam 1");
         frontLeft = initializeDevice(DcMotor.class, "frontLeft");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight = initializeDevice(DcMotor.class, "frontRight");
@@ -51,20 +56,47 @@ public class SkyStoneRobotHardware extends RobotHardware {
         spinnerLeft = initializeDevice(DcMotor.class, "spinnerLeft");
         spinnerRight = initializeDevice(DcMotor.class, "spinnerRight");
         liftMotor = initializeDevice(DcMotor.class, "liftMotor");
-        webcam = initializeDevice(WebcamName.class, "Webcam 1");
-
         spinnerRight.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
+
     }
 
     public void initVuforia() {
         // USB Camera Setup
-        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        if (webcam != null) {
+            int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+            vuforiaParameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        parameters.vuforiaLicenseKey = RobotHardware.vuforiaKey;
-        parameters.cameraName = webcam;
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        cameraNavigation = new SkystoneNavigation(this, CAM_X_DISPLACEMENT, CAM_Y_DISPLACEMENT, CAM_Z_DISPLACEMENT);
+            vuforiaParameters.vuforiaLicenseKey = RobotHardware.vuforiaKey;
+            vuforiaParameters.cameraName = webcam;
+            vuforia = ClassFactory.getInstance().createVuforia(vuforiaParameters);
+            cameraNavigation = new SkystoneNavigation(this,
+                    CAM_X_DISPLACEMENT, CAM_Y_DISPLACEMENT, CAM_Z_DISPLACEMENT,
+                    CAM_X_ROTATION, CAM_Y_ROTATION, CAM_Z_ROTATION);
+            cameraNavigation.init();
+        } else {
+            opMode.telemetry.addLine("Error: can't find camera!");
+        }
+    }
+
+    public void startTracking() {
+        if (cameraNavigation != null) {
+            isTracking = true;
+            cameraNavigation.startTracking();
+        }
+    }
+
+    public void stopTracking() {
+        if (cameraNavigation != null) {
+            isTracking = false;
+            cameraNavigation.stopTracking();
+        }
+    }
+
+    @Override
+    public void hardware_loop() {
+        if (isTracking && cameraNavigation != null) {
+            cameraNavigation.camera_loop();
+        }
     }
 }

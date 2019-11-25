@@ -30,7 +30,7 @@ public abstract class RobotHardware {
         try {
             return opMode.hardwareMap.get(deviceClass, name);
         } catch (Exception e) {
-            opMode.telemetry.addData("Error:", String.format("Device \"%s\" cannot be found.", name));
+            opMode.telemetry.addLine(String.format("Err: Device \"%s\" cannot be found.", name));
             return null;
         }
     }

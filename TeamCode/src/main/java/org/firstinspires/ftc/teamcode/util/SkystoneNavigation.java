@@ -17,16 +17,22 @@ import java.util.List;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
 public class SkystoneNavigation {
 
     RobotHardware robotHardware;
+    VuforiaTrackables targetsSkyStone;
     ArrayList<VuforiaTrackable> trackables;
-    OpenGLMatrix robotLocation;
+    private OpenGLMatrix robotLocation;
+    private boolean targetVisible;
     float xDisplacement;
     float yDisplacement;
     float zDisplacement;
+    float xRotation;
+    float yRotation;
+    float zRotation;
 
     //region Field Constants
     private static final float mmPerInch        = 25.4f;
@@ -49,15 +55,18 @@ public class SkystoneNavigation {
 
 
 
-    public SkystoneNavigation(RobotHardware robotHardware, float xDisplacement, float yDisplacement, float zDisplacement) {
+    public SkystoneNavigation(RobotHardware robotHardware, float xDisplacement, float yDisplacement, float zDisplacement, float xRotation, float yRotation, float zRotation) {
         this.robotHardware = robotHardware;
         this.xDisplacement = xDisplacement;
         this.yDisplacement = yDisplacement;
         this.zDisplacement = zDisplacement;
+        this.xRotation = xRotation;
+        this.yRotation = yRotation;
+        this.zRotation = zRotation;
     }
 
     public ArrayList<VuforiaTrackable> initalizeTrackables() {
-        VuforiaTrackables targetsSkyStone = robotHardware.vuforia.loadTrackablesFromAsset("Skystone");
+        targetsSkyStone = robotHardware.vuforia.loadTrackablesFromAsset("Skystone");
         VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
         VuforiaTrackable blueRearBridge = targetsSkyStone.get(1);
@@ -147,14 +156,32 @@ public class SkystoneNavigation {
     }
 
     public void init() {
-        robotHardware.vuforia = ClassFactory.getInstance().createVuforia(robotHardware.vuforiaParameters);
         trackables = initalizeTrackables();
+
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(xDisplacement, yDisplacement, zDisplacement)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, xRotation, yRotation, zRotation));
+
+        /**  Let all the trackable listeners know where the phone is.  */
+        for (VuforiaTrackable trackable : trackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, robotHardware.vuforiaParameters.cameraDirection);
+        }
+    }
+
+    public void startTracking() {
+        targetsSkyStone.activate();
+    }
+
+    public void stopTracking() {
+        targetsSkyStone.deactivate();
     }
 
     public void camera_loop() {
+        targetVisible = false;
         for (VuforiaTrackable trackable : trackables) {
             VuforiaTrackableDefaultListener trackableListener = (VuforiaTrackableDefaultListener) trackable.getListener();
             if (trackableListener.isVisible()) {
+                targetVisible = true;
                 OpenGLMatrix transform = trackableListener.getUpdatedRobotLocation();
                 robotLocation = transform != null ? transform : robotLocation;
                 break;
@@ -162,11 +189,16 @@ public class SkystoneNavigation {
         }
     }
 
+    //region Location Stuff
     public VectorF getRobotPosition() {
         return robotLocation.getTranslation();
     }
 
     public Orientation getRobotRotation() {
         return Orientation.getOrientation(robotLocation, EXTRINSIC, XYZ, DEGREES);
+    }
+
+    public boolean isTargetVisible() {
+        return targetVisible;
     }
 }
