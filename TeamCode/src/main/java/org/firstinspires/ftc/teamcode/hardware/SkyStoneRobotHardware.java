@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -26,9 +27,13 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public DcMotor backLeft;
     public DcMotor backRight;
 
-    // Two spinner motors
-    public DcMotor spinnerLeft;
-    public DcMotor spinnerRight;
+    // Grabber motors
+    public DcMotor horizontalGripMotor;
+    public TouchSensor horizontalTouchSensor;
+    public int horizontalGripStartingPosition = -99999;
+    public final int horizontalGripStartPadding = 20;
+    public final int horizontalGripDistance = 550;
+    public int horizontalGripLimit = 99999;
 
     // Lift motors
     public DcMotor liftMotor;
@@ -48,15 +53,19 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public void initializeHardware() {
         webcam = initializeDevice(WebcamName.class, "Webcam 1");
         frontLeft = initializeDevice(DcMotor.class, "frontLeft");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (frontLeft != null) {
+            frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
         frontRight = initializeDevice(DcMotor.class, "frontRight");
         backLeft = initializeDevice(DcMotor.class, "backLeft");
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (backLeft != null) {
+            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
         backRight = initializeDevice(DcMotor.class, "backRight");
-        spinnerLeft = initializeDevice(DcMotor.class, "spinnerLeft");
-        spinnerRight = initializeDevice(DcMotor.class, "spinnerRight");
         liftMotor = initializeDevice(DcMotor.class, "liftMotor");
-        spinnerRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        horizontalGripMotor = initializeDevice(DcMotor.class, "horizontalGrip");
+        horizontalTouchSensor = initializeDevice(TouchSensor.class, "horizontalTouch");
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
 
     }
@@ -93,10 +102,38 @@ public class SkyStoneRobotHardware extends RobotHardware {
         }
     }
 
+    public void setHorizontalGripPower(double power) {
+        if (horizontalTouchSensor.isPressed() || horizontalGripMotor.getCurrentPosition() <= horizontalGripStartingPosition) {
+            power = Math.max(power, 0);
+        } else if (horizontalGripMotor.getCurrentPosition() >= horizontalGripLimit) {
+            power = Math.min(power, 0);
+        }
+        horizontalGripMotor.setPower(power);
+    }
+
+    public boolean calibrateHorizontalGrip() {
+        horizontalGripMotor.setPower(-0.4);
+        if (horizontalTouchSensor.isPressed()) {
+            horizontalGripMotor.setPower(0);
+            horizontalGripStartingPosition = horizontalGripMotor.getCurrentPosition() + horizontalGripStartPadding;
+            horizontalGripLimit = horizontalGripStartingPosition + horizontalGripDistance;
+        }
+        return horizontalTouchSensor.isPressed();
+    }
+
     @Override
     public void hardware_loop() {
         if (isTracking && cameraNavigation != null) {
             cameraNavigation.camera_loop();
+        }
+
+
+        opMode.telemetry.addData("touch", horizontalTouchSensor.isPressed());
+        opMode.telemetry.addData("h. grip", horizontalGripMotor.getCurrentPosition());
+        opMode.telemetry.addData("h. grip start", horizontalGripStartingPosition);
+        opMode.telemetry.addData("h. grip limit", horizontalGripLimit);
+        if (horizontalTouchSensor.isPressed()) {
+            horizontalGripStartingPosition = horizontalGripMotor.getCurrentPosition();
         }
     }
 }

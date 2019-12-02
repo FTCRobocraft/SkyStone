@@ -6,35 +6,19 @@ import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.EncoderDrive;
 
-public class MoveToFieldPosAction implements Action {
-
-    float X;
-    float Y;
-    float Z;
-    double timeout;
-    EncoderDrive encoderDrive;
-
-    public MoveToFieldPosAction(float X, float Y, float Z, double timeout) {
-        this.X = X;
-        this.Y = Y;
-        this.Z = Z;
-        this.timeout = timeout;
-    }
+public class CalibrationGripAction implements Action {
 
     @Override
     public void init(RobotHardware hardware) {
-        if (hardware instanceof SkyStoneRobotHardware) {
-            encoderDrive = new EncoderDrive(hardware.omniDrive);
-            VectorF location = ((SkyStoneRobotHardware) hardware).cameraNavigation.getRobotPosition();
-        }
-
 
     }
 
 
     @Override
     public boolean doAction(RobotHardware hardware) {
-
+        if (hardware instanceof SkyStoneRobotHardware) {
+            return ((SkyStoneRobotHardware) hardware).calibrateHorizontalGrip();
+        }
         return true;
     }
 
