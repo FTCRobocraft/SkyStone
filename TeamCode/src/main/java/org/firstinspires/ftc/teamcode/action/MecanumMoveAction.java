@@ -33,6 +33,14 @@ public class MecanumMoveAction implements Action {
         this.timeout = timeout;
     }
 
+    public MecanumMoveAction(OmniDrive.Direction direction, EncoderDrive.Distance distance, float speed, double timeout) {
+        this.direction = direction;
+        // TODO: Caclculate distance using a distance thingy;
+        this.distance = 0;
+        this.speed = speed;
+        this.timeout = timeout;
+    }
+
     public void init(RobotHardware hardware) {
         driver = new EncoderDrive(hardware.omniDrive);
         driver.setInchesToDrive(direction, distance, speed, timeout);
