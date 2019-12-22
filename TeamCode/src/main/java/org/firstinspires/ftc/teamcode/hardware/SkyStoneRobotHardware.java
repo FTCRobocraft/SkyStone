@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -43,6 +44,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public SkystoneNavigation cameraNavigation;
     boolean isTracking = false;
 
+    //Servos
+    public Servo capStone;
+
 
 
     public SkyStoneRobotHardware(OpMode opMode) {
@@ -67,6 +71,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
         horizontalGripMotor = initializeDevice(DcMotor.class, "horizontalGrip");
         horizontalTouchSensor = initializeDevice(TouchSensor.class, "horizontalTouch");
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
+
+        capStone = initializeDevice(Servo.class, "capStone");
 
     }
 
