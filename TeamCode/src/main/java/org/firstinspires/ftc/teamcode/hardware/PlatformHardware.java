@@ -11,6 +11,7 @@ public class PlatformHardware extends BaseHardware {
     public DcMotor frontRight;
     public DcMotor backLeft;
     public DcMotor backRight;
+    public DcMotor lift;
     public OmniDrive omniDrive;
 
     @Override
@@ -39,6 +40,12 @@ public class PlatformHardware extends BaseHardware {
 
         try {
             backRight = hardwareMap.get(DcMotor.class, "backRight");
+        } catch (Exception e) {
+            telemetry.addData("Not Found:", e.getMessage());
+        }
+
+        try {
+            lift = hardwareMap.get(DcMotor.class, "lift");
         } catch (Exception e) {
             telemetry.addData("Not Found:", e.getMessage());
         }
