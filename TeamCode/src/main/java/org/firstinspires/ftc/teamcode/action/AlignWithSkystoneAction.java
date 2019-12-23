@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 import java.util.List;
 
-public class AlignWithSkystoneAction implements Action {
+public class  AlignWithSkystoneAction implements Action {
 
     public enum ScanDirection {
         LEFT,

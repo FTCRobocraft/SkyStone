@@ -189,6 +189,14 @@ public class SkystoneNavigation {
         }
     }
 
+    public float getDistanceFromPos(float x, float y) {
+        VectorF currentPosition = getRobotPosition();
+        if (currentPosition != null) {
+
+        }
+        return 0;
+    }
+
     //region Location Stuff
     public void setCameraRotation(float degrees) {
         OpenGLMatrix robotFromCamera = OpenGLMatrix

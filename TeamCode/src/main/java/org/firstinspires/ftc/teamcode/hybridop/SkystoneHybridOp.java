@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.hybridop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.action.CalibrationGripAction;
+import org.firstinspires.ftc.teamcode.action.CalibrateGripAction;
 import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadController;
@@ -24,7 +24,7 @@ public class SkystoneHybridOp extends HybridOp {
                 GamepadController.GamepadType.ONE,
                 GamepadController.GamepadButtons.y,
                 this,
-                new ActionSequence(new CalibrationGripAction())
+                new ActionSequence(new CalibrateGripAction())
                 ));
     }
 
