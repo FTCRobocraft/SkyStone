@@ -33,7 +33,7 @@ public class MoveAction implements Action {
         this.timeout = timeout;
     }
 
-    public MecanumMoveAction(OmniDrive.Direction direction, EncoderDrive.Distance distance, float speed, double timeout) {
+    public MoveAction(OmniDrive.Direction direction, EncoderDrive.Distance distance, float speed, double timeout) {
         this.direction = direction;
         // TODO: Caclculate distance using a distance thingy;
         this.distance = 0;

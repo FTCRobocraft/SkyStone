@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.EncoderDrive;
 
-public class CalibrationGripAction implements Action {
+public class CalibrateGripAction implements Action {
 
     @Override
     public void init(RobotHardware hardware) {
