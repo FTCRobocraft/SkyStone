@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.PlatformHardware;
+import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 
 @TeleOp(name="Platform")
 @Disabled
@@ -23,6 +24,8 @@ public class Platform extends PlatformHardware {
         if (gamepad1.right_trigger > 0) {
             omniDrive.rotateRight(gamepad1.right_trigger);
         }
+
+        lift.setPower(gamepad1.left_stick_y);
 
     }
 
