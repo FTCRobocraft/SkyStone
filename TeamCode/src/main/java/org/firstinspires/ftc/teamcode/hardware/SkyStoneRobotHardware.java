@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -41,6 +43,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     // Cameras
     public WebcamName webcam;
     public SkystoneNavigation cameraNavigation;
+    public Servo cameraServo;
     boolean isTracking = false;
 
 

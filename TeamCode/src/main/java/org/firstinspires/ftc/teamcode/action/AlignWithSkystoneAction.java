@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AlignWithSkystoneAction implements Action {
 
-    enum ScanDirection {
+    public enum ScanDirection {
         LEFT,
         RIGHT
     }

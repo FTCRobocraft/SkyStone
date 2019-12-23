@@ -10,7 +10,6 @@ public class AdamHardware extends RobotHardware {
     public DcMotor baseMotor;
     public DcMotor armMotor;
 
-    @Override
     public AdamHardware(OpMode opmode) {
         super(opmode);
     }
