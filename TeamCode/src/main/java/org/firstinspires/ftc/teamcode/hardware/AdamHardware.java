@@ -17,6 +17,8 @@ public class AdamHardware extends RobotHardware {
     @Override
     public void initializeHardware() {
         baseMotor = initializeDevice(DcMotor.class, "baseMotor");
+        baseMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        baseMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor = initializeDevice(DcMotor.class, "armMotor");
     }
 }

@@ -46,6 +46,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public Servo cameraServo;
     boolean isTracking = false;
 
+    //Servos
+    public Servo capStone;
+
 
 
     public SkyStoneRobotHardware(OpMode opMode) {
@@ -70,6 +73,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
         horizontalGripMotor = initializeDevice(DcMotor.class, "horizontalGrip");
         horizontalTouchSensor = initializeDevice(TouchSensor.class, "horizontalTouch");
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
+
+        capStone = initializeDevice(Servo.class, "capStone");
 
     }
 

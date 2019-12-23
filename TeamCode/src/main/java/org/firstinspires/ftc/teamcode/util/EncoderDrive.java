@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 /**
@@ -37,6 +38,30 @@ public class EncoderDrive {
     private float FR_speed;
     private float BL_speed;
     private float BR_speed;
+
+    public class Distance {
+
+        double value;
+        DistanceUnit unit;
+
+        public Distance(double value, DistanceUnit unit) {
+            this.value = value;
+            this.unit = unit;
+
+            switch (unit) {
+
+                case METER:
+                    break;
+                case CM:
+                    break;
+                case MM:
+                    break;
+                case INCH:
+                    break;
+            }
+        }
+
+    }
 
     public EncoderDrive(OmniDrive omniDrive) {
         this.omniDrive = omniDrive;
