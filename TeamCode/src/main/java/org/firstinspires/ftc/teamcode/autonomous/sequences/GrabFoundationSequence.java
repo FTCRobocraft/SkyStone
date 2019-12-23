@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.sequences;
 
-import org.firstinspires.ftc.teamcode.action.MecanumMoveAction;
+import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.WaitAction;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
@@ -19,7 +19,7 @@ public class GrabFoundationSequence extends ActionSequence {
         addAction(new WaitAction(PASS_DELAY));
 
         // Move forward to foundation
-        addAction(new MecanumMoveAction(OmniDrive.Direction.FORWARD, DIST_FOUNDATION, SPEED, TIMEOUT_FOUNDATION));
+        addAction(new MoveAction(OmniDrive.Direction.FORWARD, DIST_FOUNDATION, SPEED, TIMEOUT_FOUNDATION));
         // Grab foundation
         // Move foundation to building site
         // Release foundation

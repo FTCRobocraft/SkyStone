@@ -198,6 +198,17 @@ public class SkystoneNavigation {
     }
 
     //region Location Stuff
+    public void setCameraRotation(float degrees) {
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(xDisplacement, yDisplacement, zDisplacement)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, xRotation, yRotation, degrees));
+
+        /**  Let all the trackable listeners know where the phone is.  */
+        for (VuforiaTrackable trackable : trackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, robotHardware.vuforiaParameters.cameraDirection);
+        }
+    }
+
     public VectorF getRobotPosition() {
         return robotLocation.getTranslation();
     }

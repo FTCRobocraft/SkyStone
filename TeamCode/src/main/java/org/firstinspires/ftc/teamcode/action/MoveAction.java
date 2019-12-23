@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.OmniDrive;
  * Created by djfigs1 on 9/30/17.
  */
 
-public class MecanumMoveAction implements Action {
+public class MoveAction implements Action {
 
     OmniDrive.Direction direction;
     double distance;
@@ -26,7 +26,7 @@ public class MecanumMoveAction implements Action {
      * @param speed How much power is given to each motor.
      * @param timeout Timeout in case the motors act up.
      */
-    public MecanumMoveAction(OmniDrive.Direction direction, double distance, float speed, double timeout) {
+    public MoveAction(OmniDrive.Direction direction, double distance, float speed, double timeout) {
         this.direction = direction;
         this.distance = distance;
         this.speed = speed;
