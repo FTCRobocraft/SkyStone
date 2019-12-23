@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.action.MarkerNavigation;
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.RotateCameraAction;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
+import org.firstinspires.ftc.teamcode.util.EncoderDrive;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class FetchSkystoneSequence extends ActionSequence {
@@ -15,7 +16,7 @@ public class FetchSkystoneSequence extends ActionSequence {
     public final double PASSING_TIME = 0;
 
     // Distances
-    public EncoderDrive.Distance
+    //public EncoderDrive.Distance
 
     public FetchSkystoneSequence() {
         addAction(new BetterMoveAction(OmniDrive.Direction.FORWARD, 12, 0.5f));
