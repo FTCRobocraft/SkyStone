@@ -17,18 +17,21 @@ public class TestArm extends PlatformHardware {
         LOW, MIDDLE, HIGH;
     }
 
+    enum armStates {
+        BUTTON, MIDDLE, FAR;
+    }
+
     liftStates liftState;
+
+    armStates armState;
 
     int liftStart;
     int armStart;
 
-    boolean grabberClosed;
-
-    boolean atButton;
 
     @Override
     public void start() {
-        //Get the starting positions and set the boundaries
+        // Get the starting positions and set the boundaries
         liftStart = lift.getCurrentPosition() + 100;
         armStart = arm.getCurrentPosition() - 100;
 
@@ -36,6 +39,7 @@ public class TestArm extends PlatformHardware {
         armBound = armStart - 400;
 
         liftState = liftStates.LOW;
+        armState = armStates.BUTTON;
     }
 
 
@@ -50,7 +54,7 @@ public class TestArm extends PlatformHardware {
         }
 
 
-        //Move the arm within the boundaries
+        // Move the arm within the boundaries
         switch(liftState) {
             case LOW:
                 if (gamepad1.dpad_up) {
@@ -67,67 +71,72 @@ public class TestArm extends PlatformHardware {
                 } else {
                     lift.setPower(0);
                 }
+                break;
             case HIGH:
                 if (gamepad1.dpad_down) {
                     lift.setPower(-liftPower);
+                    liftState = liftStates.MIDDLE;
                 } else {
                     lift.setPower(0);
                 }
+                break;
         }
 
 
-        //Servo
+        // Servo
         if (gamepad1.a) {
-            if (grabberClosed) {
-                grabber.setPosition(180);
-                grabberClosed = false;
-            } else {
-                grabber.setPosition(0);
-                grabberClosed = true;
-            }
+            // ???
         }
 
 
-        //Button logic
+        // Button logic
         if (button.isPressed()) {
-            atButton = true;
-        }
-        if (atButton) {
-            if (gamepad1.dpad_right) {
-                arm.setPower(armPower);
-                atButton = false;
-            } else {
-                arm.setPower(0);
-            }
+            armState = armStates.BUTTON;
         } else if (arm.getCurrentPosition() >= armBound) {
-            if (gamepad1.dpad_left) {
-                arm.setPower(-armPower);
-            } else {
-                arm.setPower(0);
-            }
+            armState = armStates.FAR;
         } else {
-            if (gamepad1.dpad_left) {
-                arm.setPower(-armPower);
-            } else {
-                arm.setPower(0);
-            }
-            if (gamepad1.dpad_right) {
-                arm.setPower(armPower);
-            } else {
-                arm.setPower(0);
-            }
+            armState = armStates.MIDDLE;
+        }
+
+        switch (armState) {
+            case BUTTON:
+                if (gamepad1.dpad_right) {
+                    arm.setPower(armPower);
+                    armState = armStates.MIDDLE;
+                } else {
+                    arm.setPower(0);
+                }
+                break;
+            case MIDDLE:
+                if (gamepad1.dpad_left) {
+                    arm.setPower(-armPower);
+                } else {
+                    arm.setPower(0);
+                }
+                if (gamepad1.dpad_right) {
+                    arm.setPower(armPower);
+                } else {
+                    arm.setPower(0);
+                }
+                break;
+            case FAR:
+                if (gamepad1.dpad_left) {
+                    arm.setPower(-armPower);
+                    armState = armStates.MIDDLE;
+                } else {
+                    arm.setPower(0);
+                }
+                break;
         }
 
 
-        //Add data to the telemetry
+        // Add data to the telemetry
         telemetry.addData("Lift Position: ", lift.getCurrentPosition());
         telemetry.addData("Lift Start: ", liftStart);
         telemetry.addData("Lift Max: ", liftBound);
         telemetry.addData("Arm Position: ", arm.getCurrentPosition());
         telemetry.addData("Arm Start: ", armStart);
         telemetry.addData("Arm Max: ", armBound);
-
-        telemetry.addData("Servo Position: ", grabber.getPosition());
         telemetry.addData("Touch Sensor: ", button.isPressed());
     }
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,7 +18,7 @@ public class PlatformHardware extends BaseHardware {
     public DcMotor lift;
     public DcMotor arm;
 
-    public Servo grabber;
+    public CRServo grabber;
 
     public TouchSensor button;
 
@@ -66,7 +67,7 @@ public class PlatformHardware extends BaseHardware {
         }
 
         try {
-            grabber = hardwareMap.get(Servo.class, "grabber");
+            grabber = hardwareMap.get(CRServo.class, "grabber");
         } catch (Exception e) {
             telemetry.addData("Not Found:", e.getMessage());
         }
