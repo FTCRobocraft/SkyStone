@@ -13,8 +13,16 @@ public class TestArm extends PlatformHardware {
     final int liftPower = 1;
     final int armPower = -1;
 
+    enum liftStates {
+        LOW, MIDDLE, HIGH;
+    }
+
+    liftStates liftState;
+
     int liftStart;
     int armStart;
+
+    boolean grabberClosed;
 
     boolean atButton;
 
@@ -26,35 +34,56 @@ public class TestArm extends PlatformHardware {
 
         liftBound = liftStart + 900;
         armBound = armStart - 400;
+
+        liftState = liftStates.LOW;
     }
 
 
     @Override
     public void loop() {
+        if (lift.getCurrentPosition() <= liftStart) {
+            liftState = liftStates.LOW;
+        } else if(lift.getCurrentPosition() >= liftBound) {
+            liftState = liftStates.HIGH;
+        } else {
+            liftState = liftStates.MIDDLE;
+        }
+
 
         //Move the arm within the boundaries
-        if (lift.getCurrentPosition() <= liftStart) {
-            if (gamepad1.dpad_up) {
-                lift.setPower(liftPower);
+        switch(liftState) {
+            case LOW:
+                if (gamepad1.dpad_up) {
+                    lift.setPower(liftPower);
+                } else {
+                    lift.setPower(0);
+                }
+                break;
+            case MIDDLE:
+                if (gamepad1.dpad_up) {
+                    lift.setPower(liftPower);
+                } else if (gamepad1.dpad_down) {
+                    lift.setPower(-liftPower);
+                } else {
+                    lift.setPower(0);
+                }
+            case HIGH:
+                if (gamepad1.dpad_down) {
+                    lift.setPower(-liftPower);
+                } else {
+                    lift.setPower(0);
+                }
+        }
+
+
+        //Servo
+        if (gamepad1.a) {
+            if (grabberClosed) {
+                grabber.setPosition(180);
+                grabberClosed = false;
             } else {
-                lift.setPower(0);
-            }
-        } else if (lift.getCurrentPosition() >= liftBound) {
-            if (gamepad1.dpad_down) {
-                lift.setPower(-liftPower);
-            } else {
-                lift.setPower(0);
-            }
-        } else {
-            if (gamepad1.dpad_up) {
-                lift.setPower(liftPower);
-            } else {
-                lift.setPower(0);
-            }
-            if (gamepad1.dpad_down) {
-                lift.setPower(-liftPower);
-            } else {
-                lift.setPower(0);
+                grabber.setPosition(0);
+                grabberClosed = true;
             }
         }
 
@@ -97,6 +126,8 @@ public class TestArm extends PlatformHardware {
         telemetry.addData("Arm Position: ", arm.getCurrentPosition());
         telemetry.addData("Arm Start: ", armStart);
         telemetry.addData("Arm Max: ", armBound);
+
+        telemetry.addData("Servo Position: ", grabber.getPosition());
         telemetry.addData("Touch Sensor: ", button.isPressed());
     }
 

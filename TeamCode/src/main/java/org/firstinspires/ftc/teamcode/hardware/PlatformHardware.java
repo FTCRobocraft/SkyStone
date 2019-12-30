@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
@@ -15,6 +16,8 @@ public class PlatformHardware extends BaseHardware {
 
     public DcMotor lift;
     public DcMotor arm;
+
+    public Servo grabber;
 
     public TouchSensor button;
 
@@ -58,6 +61,12 @@ public class PlatformHardware extends BaseHardware {
 
         try {
             arm = hardwareMap.get(DcMotor.class, "arm");
+        } catch (Exception e) {
+            telemetry.addData("Not Found:", e.getMessage());
+        }
+
+        try {
+            grabber = hardwareMap.get(Servo.class, "grabber");
         } catch (Exception e) {
             telemetry.addData("Not Found:", e.getMessage());
         }
