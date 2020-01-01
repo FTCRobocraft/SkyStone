@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.action;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-public class GrabStoneAction implements Action {
+public class ReleaseCapstoneAction implements Action {
     @Override
     public void init(RobotHardware hardware) {
 
@@ -24,4 +24,3 @@ public class GrabStoneAction implements Action {
         return null;
     }
 }
-

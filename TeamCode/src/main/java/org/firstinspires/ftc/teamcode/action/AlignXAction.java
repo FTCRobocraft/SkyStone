@@ -58,9 +58,9 @@ public class AlignXAction implements Action {
             }
 
             return false;
+        } else {
+            return true;
         }
-
-        return true;
     }
 
     public Double progress() {

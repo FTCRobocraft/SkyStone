@@ -10,18 +10,29 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.SkystoneNavigation;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 
 public class SkyStoneRobotHardware extends RobotHardware {
 
+    //region constants
     public static final float CAM_X_DISPLACEMENT = 0f;
     public static final float CAM_Y_DISPLACEMENT = 0f;
     public static final float CAM_Z_DISPLACEMENT = 0f;
     public static final float CAM_X_ROTATION = 0f;
     public static final float CAM_Y_ROTATION = -90f;
     public static final float CAM_Z_ROTATION = 0f;
+
+    public static final double GRIP_TIME = 1000;
+
+    public static final int HORIZONTAL_GRIP_RANGE = 400;
+    public static final int LIFT_RANGE = 900;
+    public static final int LIFT_RAISED = 400;
+    //endregion
+
+    //region hardware
 
     // Four main motors
     public DcMotor frontLeft;
@@ -31,11 +42,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     // Grabber motors
     public DcMotor horizontalGripMotor;
-    public TouchSensor horizontalTouchSensor;
-    public int horizontalGripStartingPosition = -99999;
-    public final int horizontalGripStartPadding = 20;
-    public final int horizontalGripDistance = 550;
-    public int horizontalGripLimit = 99999;
+    public Servo gripServo;
 
     // Lift motors
     public DcMotor liftMotor;
@@ -44,11 +51,24 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public WebcamName webcam;
     public SkystoneNavigation cameraNavigation;
     public Servo cameraServo;
-    boolean isTracking = false;
+
 
     //Servos
-    public Servo capStone;
+    public CRServo capStone;
 
+    //endregion
+
+    // region TFOD Models
+    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Stone";
+    private static final String LABEL_SECOND_ELEMENT = "Skystone";
+    //endregion
+
+    // Variables
+    boolean isTracking = false;
+
+    public int horizontalGripStartingPos;
+    public int liftMotorStartingPos;
 
 
     public SkyStoneRobotHardware(OpMode opMode) {
@@ -56,8 +76,15 @@ public class SkyStoneRobotHardware extends RobotHardware {
     }
 
     @Override
+    public void initializeAutonomous() {
+        this.initVuforia();
+        this.initTFOD();
+    }
+
+    @Override
     public void initializeHardware() {
         webcam = initializeDevice(WebcamName.class, "Webcam 1");
+        cameraServo = initializeDevice(Servo.class, "cameraServo");
         frontLeft = initializeDevice(DcMotor.class, "frontLeft");
         if (frontLeft != null) {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -70,11 +97,15 @@ public class SkyStoneRobotHardware extends RobotHardware {
         }
         backRight = initializeDevice(DcMotor.class, "backRight");
         liftMotor = initializeDevice(DcMotor.class, "liftMotor");
+        gripServo = initializeDevice(Servo.class, "gripServo");
         horizontalGripMotor = initializeDevice(DcMotor.class, "horizontalGrip");
-        horizontalTouchSensor = initializeDevice(TouchSensor.class, "horizontalTouch");
+        horizontalGripMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
 
-        capStone = initializeDevice(Servo.class, "capStone");
+        capStone = initializeDevice(CRServo.class, "capStone");
+
+        horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
+        liftMotorStartingPos = liftMotor.getCurrentPosition();
 
     }
 
@@ -96,6 +127,15 @@ public class SkyStoneRobotHardware extends RobotHardware {
         }
     }
 
+    public void initTFOD() {
+        int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
     public void startTracking() {
         if (cameraNavigation != null) {
             isTracking = true;
@@ -111,22 +151,27 @@ public class SkyStoneRobotHardware extends RobotHardware {
     }
 
     public void setHorizontalGripPower(double power) {
-        if (horizontalTouchSensor.isPressed() || horizontalGripMotor.getCurrentPosition() <= horizontalGripStartingPosition) {
-            power = Math.max(power, 0);
-        } else if (horizontalGripMotor.getCurrentPosition() >= horizontalGripLimit) {
-            power = Math.min(power, 0);
+        int currentPos = horizontalGripMotor.getCurrentPosition();
+
+        if (currentPos <= horizontalGripStartingPos) {
+            horizontalGripMotor.setPower(Math.max(0, power));
+        } else if (currentPos >= horizontalGripStartingPos + HORIZONTAL_GRIP_RANGE) {
+            horizontalGripMotor.setPower(Math.min(0, power));
+        } else {
+            horizontalGripMotor.setPower(power);
         }
-        horizontalGripMotor.setPower(power);
     }
 
-    public boolean calibrateHorizontalGrip() {
-        horizontalGripMotor.setPower(-0.4);
-        if (horizontalTouchSensor.isPressed()) {
-            horizontalGripMotor.setPower(0);
-            horizontalGripStartingPosition = horizontalGripMotor.getCurrentPosition() + horizontalGripStartPadding;
-            horizontalGripLimit = horizontalGripStartingPosition + horizontalGripDistance;
+    public void setLiftPower(double power) {
+        int currentPos = liftMotor.getCurrentPosition();
+
+        if (currentPos <= liftMotorStartingPos) {
+            liftMotor.setPower(Math.max(0, power));
+        } else if (currentPos >= liftMotorStartingPos + LIFT_RANGE) {
+            liftMotor.setPower(Math.min(0, power));
+        } else {
+            liftMotor.setPower(power);
         }
-        return horizontalTouchSensor.isPressed();
     }
 
     @Override
@@ -136,12 +181,6 @@ public class SkyStoneRobotHardware extends RobotHardware {
         }
 
 
-        opMode.telemetry.addData("touch", horizontalTouchSensor.isPressed());
         opMode.telemetry.addData("h. grip", horizontalGripMotor.getCurrentPosition());
-        opMode.telemetry.addData("h. grip start", horizontalGripStartingPosition);
-        opMode.telemetry.addData("h. grip limit", horizontalGripLimit);
-        if (horizontalTouchSensor.isPressed()) {
-            horizontalGripStartingPosition = horizontalGripMotor.getCurrentPosition();
-        }
     }
 }
