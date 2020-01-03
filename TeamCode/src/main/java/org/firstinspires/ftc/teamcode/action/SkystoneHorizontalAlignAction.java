@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 import java.util.List;
 
-public class  AlignWithSkystoneAction implements Action {
+public class SkystoneHorizontalAlignAction implements Action {
 
     public enum ScanDirection {
         LEFT,
@@ -21,7 +21,7 @@ public class  AlignWithSkystoneAction implements Action {
     double timeout;
     double endTime;
 
-    public AlignWithSkystoneAction(ScanDirection direction, double timeout) {
+    public SkystoneHorizontalAlignAction(ScanDirection direction, double timeout) {
         this.scanDirection = direction;
         this.timeout = timeout;
     }
@@ -34,15 +34,16 @@ public class  AlignWithSkystoneAction implements Action {
 
     @Override
     public boolean doAction(RobotHardware hardware) {
-        if (scanDirection == ScanDirection.RIGHT) {
-            hardware.omniDrive.moveRight(SCAN_SPEED);
-        } else {
-            hardware.omniDrive.moveLeft(SCAN_SPEED);
-        }
-
         if (hardware.tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
+
+            if (scanDirection == ScanDirection.RIGHT) {
+                hardware.omniDrive.moveRight(SCAN_SPEED);
+            } else {
+                hardware.omniDrive.moveLeft(SCAN_SPEED);
+            }
+
             List<Recognition> updatedRecognitions = hardware.tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 hardware.opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -65,12 +66,17 @@ public class  AlignWithSkystoneAction implements Action {
                     }
                 }
 
+
+
                 if (skystone != null) {
                     float centerX = skystone.getLeft() + (skystone.getWidth() / 2);
                     hardware.opMode.telemetry.addData("centerX", centerX);
                     float centerDisplacement = 400 - centerX;
                     hardware.opMode.telemetry.addData("center displacement", centerDisplacement);
-                    return Math.abs(centerDisplacement) <= TOLERANCE;
+                    if (Math.abs(centerDisplacement) <= TOLERANCE) {
+                        hardware.omniDrive.stopDrive();
+                        return true;
+                    }
                 }
             }
         }

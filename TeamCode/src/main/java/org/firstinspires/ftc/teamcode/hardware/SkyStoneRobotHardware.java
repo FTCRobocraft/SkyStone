@@ -180,7 +180,12 @@ public class SkyStoneRobotHardware extends RobotHardware {
             cameraNavigation.camera_loop();
         }
 
+        opMode.telemetry.addData("isTracking", isTracking);
 
-        opMode.telemetry.addData("h. grip", horizontalGripMotor.getCurrentPosition());
+        opMode.telemetry.addData("Horizontal Grip", horizontalGripMotor.getCurrentPosition());
+        opMode.telemetry.addData("Lift Motor", liftMotor.getCurrentPosition());
+        opMode.telemetry.addData("Grip Servo", gripServo.getPosition());
+        opMode.telemetry.addData("Camera Servo", cameraServo.getPosition());
+
     }
 }

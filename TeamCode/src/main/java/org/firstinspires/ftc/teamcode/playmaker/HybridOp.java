@@ -23,7 +23,7 @@ public abstract class HybridOp extends OpMode {
     public void loop() {
         telemetry.addData("Autonomous", isAutonomous);
         hardware.hardware_loop();
-        hybrid_loop();
+        this.hybrid_loop();
         gamepadController.controllerLoop(isAutonomous);
 
         if (isAutonomous) {

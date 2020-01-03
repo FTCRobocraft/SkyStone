@@ -3,13 +3,8 @@ package org.firstinspires.ftc.teamcode.playmaker;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import java.lang.reflect.Field;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class GamepadController {
 
@@ -38,14 +33,14 @@ public class GamepadController {
             right_bumper,
             left_stick_button,
             right_stick_button
-    };
+    }
 
     public GamepadController(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
 
-        for (int i=0;i<GamepadButtons.values().length;i++) {
-            GamepadButtons button = GamepadButtons.values()[i];
+        // Initialize all the arrays
+        for (GamepadButtons button : GamepadButtons.values()) {
             gamepad1Pressed.put(button, false);
             gamepad2Pressed.put(button, false);
             gamepad1Toggled.put(button, false);
@@ -71,8 +66,7 @@ public class GamepadController {
 
 
     public void controllerLoop(Boolean autonomousMode) {
-        for (int i=0; i<GamepadButtons.values().length; i++) {
-            GamepadButtons button = GamepadButtons.values()[i];
+        for (GamepadButtons button : GamepadButtons.values()) {
             try {
                 Field buttonField = Gamepad.class.getField(button.toString());
                 boolean one = buttonField.getBoolean(gamepad1);

@@ -14,11 +14,11 @@ public class TestArm extends PlatformHardware {
     final int armPower = -1;
 
     enum liftStates {
-        LOW, MIDDLE, HIGH;
+        LOW, MIDDLE, HIGH
     }
 
     enum armStates {
-        BUTTON, MIDDLE, FAR;
+        BUTTON, MIDDLE, FAR
     }
 
     liftStates liftState;
