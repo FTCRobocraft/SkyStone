@@ -11,12 +11,12 @@ public class GamepadController {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
 
-    private Map<GamepadButtons, GamepadListener> gamepad1Listeners = new HashMap<>();
-    private Map<GamepadButtons, GamepadListener> gamepad2Listeners = new HashMap<>();
-    private Map<GamepadButtons, Boolean> gamepad1Pressed = new HashMap<>();
-    private Map<GamepadButtons, Boolean> gamepad2Pressed = new HashMap<>();
-    private Map<GamepadButtons, Boolean> gamepad1Toggled = new HashMap<>();
-    private Map<GamepadButtons, Boolean> gamepad2Toggled = new HashMap<>();
+    private HashMap<GamepadButtons, GamepadListener> gamepad1Listeners = new HashMap<>();
+    private HashMap<GamepadButtons, GamepadListener> gamepad2Listeners = new HashMap<>();
+    private HashMap<GamepadButtons, Boolean> gamepad1Pressed = new HashMap<>();
+    private HashMap<GamepadButtons, Boolean> gamepad2Pressed = new HashMap<>();
+    private HashMap<GamepadButtons, Boolean> gamepad1Toggled = new HashMap<>();
+    private HashMap<GamepadButtons, Boolean> gamepad2Toggled = new HashMap<>();
 
     public enum GamepadButtons {
             a,
@@ -44,7 +44,7 @@ public class GamepadController {
             gamepad1Pressed.put(button, false);
             gamepad2Pressed.put(button, false);
             gamepad1Toggled.put(button, false);
-            gamepad1Toggled.put(button, false);
+            gamepad2Toggled.put(button, false);
         }
     }
 
@@ -73,6 +73,8 @@ public class GamepadController {
                 boolean two = buttonField.getBoolean(gamepad2);
                 boolean isOneFirstPress = one && !gamepad1Pressed.get(button);
                 boolean isTwoFirstPress = two && !gamepad2Pressed.get(button);
+                boolean isOneFirstRelease = !one && gamepad1Pressed.get(button);
+                boolean isTwoFirstRelease = !two && gamepad2Pressed.get(button);
                 gamepad1Pressed.put(button, one);
                 gamepad2Pressed.put(button, two);
                 GamepadListener listenerOne = gamepad1Listeners.get(button);
@@ -99,7 +101,7 @@ public class GamepadController {
                         case HOLD_RELEASE:
                             if (!autonomousMode && one) {
                                 listenerOne.activateInterface.execute();
-                            } else if (!autonomousMode && !one) {
+                            } else if (!autonomousMode && isOneFirstRelease) {
                                 listenerOne.deactivateInterface.execute();
                             }
                             break;
@@ -127,7 +129,7 @@ public class GamepadController {
                         case HOLD_RELEASE:
                             if (!autonomousMode && two) {
                                 listenerTwo.activateInterface.execute();
-                            } else if (!autonomousMode && !two) {
+                            } else if (!autonomousMode && isTwoFirstRelease) {
                                 listenerTwo.deactivateInterface.execute();
                             }
                             break;

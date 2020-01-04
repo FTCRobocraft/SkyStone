@@ -82,6 +82,7 @@ public class MotorTuner extends BaseHardware {
             telemetry.addData("info", activeMotor.getConnectionInfo());
             telemetry.addData("Port", activeMotor.getPortNumber());
             telemetry.addData("Position", activeMotor.getCurrentPosition());
+            telemetry.addData("Mode", activeMotor.getMode());
         }
     }
 }

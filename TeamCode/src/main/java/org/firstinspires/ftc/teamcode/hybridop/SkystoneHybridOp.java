@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.action.LiftMotorAction;
 import org.firstinspires.ftc.teamcode.action.ReleaseCapstoneAction;
+import org.firstinspires.ftc.teamcode.action.GripAction;
 import org.firstinspires.ftc.teamcode.action.ToggleGripAction;
+import org.firstinspires.ftc.teamcode.autonomous.sequences.PickUpStoneSequence;
 import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.GamepadController.GamepadType;
@@ -33,6 +35,12 @@ public class SkystoneHybridOp extends HybridOp {
                 }, () -> {
                     reverseMode = false;
                 }));
+
+        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
+                GamepadType.ONE, GamepadButtons.y,
+                this,
+                new PickUpStoneSequence()
+        ));
 
         //endregion
 
@@ -128,6 +136,16 @@ public class SkystoneHybridOp extends HybridOp {
         } else {
             skyStoneRobotHardware.omniDrive.dpadMove(gamepad1, DPAD_POWER, reverseMode);
         }
+
+        if (gamepad2.right_stick_y != 0) {
+            skyStoneRobotHardware.liftMotor.setPower(-gamepad2.right_stick_y);
+        } else if (!gamepad2.dpad_down && !gamepad2.dpad_up && !gamepad2.dpad_left && !gamepad2.dpad_right){
+            skyStoneRobotHardware.setLiftPower(-gamepad2.left_stick_y);
+        }
+
+
+        telemetry.addData("ly", -gamepad2.left_stick_y);
+        telemetry.addData("ry", -gamepad2.right_stick_y);
     }
 
 }

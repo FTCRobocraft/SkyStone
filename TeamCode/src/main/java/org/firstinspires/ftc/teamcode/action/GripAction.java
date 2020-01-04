@@ -4,21 +4,26 @@ import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-public class ToggleGripAction implements Action {
+public class GripAction implements Action {
 
     double endTime;
+    boolean grip;
+
+    public GripAction(boolean grip) {
+        this.grip = grip;
+    }
 
     @Override
     public void init(RobotHardware hardware) {
-        if (hardware instanceof SkyStoneRobotHardware) {
-            double currentPosition = ((SkyStoneRobotHardware) hardware).gripServo.getPosition();
-            ((SkyStoneRobotHardware) hardware).gripServo.setPosition(currentPosition == 0 ? 1 : 0);
-        }
-
+        endTime = System.currentTimeMillis() + SkyStoneRobotHardware.GRIP_TIME;
     }
 
     @Override
     public boolean doAction(RobotHardware hardware) {
+        if (hardware instanceof SkyStoneRobotHardware) {
+            ((SkyStoneRobotHardware) hardware).gripServo.setPosition(grip ? 1 : 0);
+            return System.currentTimeMillis() >= endTime;
+        }
         return true;
     }
 

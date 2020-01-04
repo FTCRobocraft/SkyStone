@@ -13,6 +13,8 @@ public class PickUpStoneSequence extends ActionSequence {
         addAction(new SetTrackingAction(true));
         addAction(new LowerLiftAction());
         addAction(new StoneAlignAction(200));
+        addAction(new SetTrackingAction(false));
+        //move
 
     }
 

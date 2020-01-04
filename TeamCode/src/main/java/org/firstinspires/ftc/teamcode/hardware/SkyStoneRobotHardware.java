@@ -28,7 +28,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public static final double GRIP_TIME = 1000;
 
     public static final int HORIZONTAL_GRIP_RANGE = 400;
-    public static final int LIFT_RANGE = 900;
+    public static final int LIFT_RANGE = 1200;
     public static final int LIFT_RAISED = 400;
     //endregion
 
@@ -166,11 +166,14 @@ public class SkyStoneRobotHardware extends RobotHardware {
         int currentPos = liftMotor.getCurrentPosition();
 
         if (currentPos <= liftMotorStartingPos) {
-            liftMotor.setPower(Math.max(0, power));
+            liftMotor.setPower(Math.max(0D, power));
+            opMode.telemetry.addData("MAX", Math.max(0D, power));
         } else if (currentPos >= liftMotorStartingPos + LIFT_RANGE) {
-            liftMotor.setPower(Math.min(0, power));
+            liftMotor.setPower(Math.min(0D, power));
+            opMode.telemetry.addData("MIN", Math.min(0D, power));
         } else {
             liftMotor.setPower(power);
+            opMode.telemetry.addData("POWER", power);
         }
     }
 
@@ -181,7 +184,10 @@ public class SkyStoneRobotHardware extends RobotHardware {
         }
 
         opMode.telemetry.addData("isTracking", isTracking);
+        opMode.telemetry.addData("lift mode", liftMotor.getMode());
 
+        opMode.telemetry.addData("Lift Start Pos", liftMotorStartingPos);
+        opMode.telemetry.addData("Grip Start Pos", horizontalGripStartingPos);
         opMode.telemetry.addData("Horizontal Grip", horizontalGripMotor.getCurrentPosition());
         opMode.telemetry.addData("Lift Motor", liftMotor.getCurrentPosition());
         opMode.telemetry.addData("Grip Servo", gripServo.getPosition());

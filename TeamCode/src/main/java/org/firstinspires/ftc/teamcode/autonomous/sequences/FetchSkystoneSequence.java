@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous.sequences;
 
 import org.firstinspires.ftc.teamcode.action.SkystoneHorizontalAlignAction;
 import org.firstinspires.ftc.teamcode.action.BetterMoveAction;
-import org.firstinspires.ftc.teamcode.action.ToggleGripAction;
+import org.firstinspires.ftc.teamcode.action.GripAction;
 import org.firstinspires.ftc.teamcode.action.AlignXAction;
 import org.firstinspires.ftc.teamcode.action.RotateCameraAction;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
@@ -19,7 +19,7 @@ public class FetchSkystoneSequence extends ActionSequence {
     public FetchSkystoneSequence() {
         addAction(new BetterMoveAction(OmniDrive.Direction.FORWARD, 12, 0.5f));
         addAction(new SkystoneHorizontalAlignAction(SkystoneHorizontalAlignAction.ScanDirection.RIGHT, 10000));
-        addAction(new ToggleGripAction());
+        addAction(new GripAction(true));
         addAction(new RotateCameraAction(-90));
         addAction(new AlignXAction(48, AlignXAction.AlignDirection.LEFT_RIGHT, 0.5f));
 
