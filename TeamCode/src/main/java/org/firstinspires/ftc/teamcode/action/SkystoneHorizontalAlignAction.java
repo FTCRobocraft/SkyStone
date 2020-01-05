@@ -71,7 +71,7 @@ public class SkystoneHorizontalAlignAction implements Action {
                 if (skystone != null) {
                     float centerX = skystone.getLeft() + (skystone.getWidth() / 2);
                     hardware.opMode.telemetry.addData("centerX", centerX);
-                    float centerDisplacement = 400 - centerX;
+                    float centerDisplacement = (skystone.getImageWidth() / 2) - centerX;
                     hardware.opMode.telemetry.addData("center displacement", centerDisplacement);
                     if (Math.abs(centerDisplacement) <= TOLERANCE) {
                         hardware.omniDrive.stopDrive();

@@ -19,9 +19,9 @@ public class FetchSkystoneSequence extends ActionSequence {
     public FetchSkystoneSequence() {
         addAction(new BetterMoveAction(OmniDrive.Direction.FORWARD, 12, 0.5f));
         addAction(new SkystoneHorizontalAlignAction(SkystoneHorizontalAlignAction.ScanDirection.RIGHT, 10000));
-        addAction(new GripAction(true));
-        addAction(new RotateCameraAction(-90));
-        addAction(new AlignXAction(48, AlignXAction.AlignDirection.LEFT_RIGHT, 0.5f));
+        //addAction(new GripAction(true));
+       // addAction(new RotateCameraAction(-90));
+        //addAction(new AlignXAction(48, AlignXAction.AlignDirection.LEFT_RIGHT, 0.5f));
 
     }
 }

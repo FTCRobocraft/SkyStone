@@ -8,9 +8,9 @@ import java.util.List;
 
 public class StoneAlignAction implements Action {
 
-    public static final double HORIZONTAL_DEADZONE = 10;
-    public static final double WIDTH_DEADZONE = 10;
-    public static final float ALIGN_SPEED = 0;
+    public static final double HORIZONTAL_DEADZONE = 50;
+    public static final double WIDTH_DEADZONE = 50;
+    public static final float ALIGN_SPEED = 0.4f;
     double desiredWidth;
 
     public StoneAlignAction(double desiredWidth) {
@@ -27,7 +27,7 @@ public class StoneAlignAction implements Action {
         hardware.omniDrive.stopDrive();
 
         if (hardware.tfod != null) {
-            List<Recognition> updatedRecognitions = hardware.tfod.getUpdatedRecognitions();
+            List<Recognition> updatedRecognitions = hardware.tfod.getRecognitions();
             Recognition closestStone = null;
 
             // Find closest stone by looking for widest block

@@ -54,7 +54,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
 
     //Servos
-    public CRServo capStone;
+    public Servo capStone;
 
     //endregion
 
@@ -102,7 +102,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
         horizontalGripMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
 
-        capStone = initializeDevice(CRServo.class, "capStone");
+        capStone = initializeDevice(Servo.class, "capStone");
 
         horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
         liftMotorStartingPos = liftMotor.getCurrentPosition();
@@ -137,16 +137,24 @@ public class SkyStoneRobotHardware extends RobotHardware {
     }
 
     public void startTracking() {
+        isTracking = true;
         if (cameraNavigation != null) {
-            isTracking = true;
             cameraNavigation.startTracking();
+        }
+
+        if (tfod != null) {
+            tfod.activate();
         }
     }
 
     public void stopTracking() {
+        isTracking = false;
         if (cameraNavigation != null) {
-            isTracking = false;
             cameraNavigation.stopTracking();
+        }
+
+        if (tfod != null) {
+            tfod.deactivate();
         }
     }
 

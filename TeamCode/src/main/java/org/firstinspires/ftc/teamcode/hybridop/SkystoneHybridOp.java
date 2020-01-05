@@ -19,38 +19,50 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 public class SkystoneHybridOp extends HybridOp {
 
     private static final float DPAD_POWER = 1f;
+    private static final float SLOW_DPAD_POWER = 0.4f;
     boolean reverseMode = false;
+    boolean slowMode = true;
     private SkyStoneRobotHardware skyStoneRobotHardware;
 
     @Override
     public void init() {
         super.init();
 
+        //skyStoneRobotHardware.initVuforia();
+        //skyStoneRobotHardware.initTFOD();
+        //skyStoneRobotHardware.startTracking();
+
         //region Gamepad 1
 
-        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
-                GamepadType.ONE, GamepadButtons.a,
+        gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(
+                GamepadType.ONE, GamepadButtons.b,
                 () -> {
-                    reverseMode = true;
+                    slowMode = false;
                 }, () -> {
-                    reverseMode = false;
-                }));
-
-        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
-                GamepadType.ONE, GamepadButtons.y,
-                this,
-                new PickUpStoneSequence()
+                    slowMode = true;
+                }
         ));
+
+
 
         //endregion
 
         // region Gamepad 2
 
         // Toggle Grip
-        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
+        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
                 GamepadType.TWO, GamepadButtons.a,
+                () ->  {
+                    skyStoneRobotHardware.gripServo.setPosition(1);
+                }, () -> {
+                    skyStoneRobotHardware.gripServo.setPosition(0);
+                }
+        ));
+
+        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
+                GamepadType.TWO, GamepadButtons.b,
                 this,
-                new ActionSequence(new ToggleGripAction())
+                new PickUpStoneSequence()
         ));
 
         // Lift Motor to Start
@@ -104,13 +116,14 @@ public class SkystoneHybridOp extends HybridOp {
                 }));
 
         // Release capstone
-        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
+        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
                 GamepadType.TWO, GamepadButtons.back,
-                this,
-                new ActionSequence(new ReleaseCapstoneAction())
-                ));
-
-        //endregion
+                () ->  {
+                    skyStoneRobotHardware.capStone.setPosition(1);
+                }, () -> {
+                    skyStoneRobotHardware.capStone.setPosition(0.5);
+                }
+        ));
 
     }
 
@@ -134,18 +147,9 @@ public class SkystoneHybridOp extends HybridOp {
         } else if (gamepad1.right_trigger != 0) {
             skyStoneRobotHardware.omniDrive.rotateRight(gamepad1.right_trigger);
         } else {
-            skyStoneRobotHardware.omniDrive.dpadMove(gamepad1, DPAD_POWER, reverseMode);
+            skyStoneRobotHardware.omniDrive.dpadMove(gamepad1, slowMode ? SLOW_DPAD_POWER : DPAD_POWER, reverseMode);
         }
 
-        if (gamepad2.right_stick_y != 0) {
-            skyStoneRobotHardware.liftMotor.setPower(-gamepad2.right_stick_y);
-        } else if (!gamepad2.dpad_down && !gamepad2.dpad_up && !gamepad2.dpad_left && !gamepad2.dpad_right){
-            skyStoneRobotHardware.setLiftPower(-gamepad2.left_stick_y);
-        }
-
-
-        telemetry.addData("ly", -gamepad2.left_stick_y);
-        telemetry.addData("ry", -gamepad2.right_stick_y);
     }
 
 }

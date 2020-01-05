@@ -21,10 +21,11 @@ public class LiftMotorAction implements Action {
     @Override
     public void init(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
-            prevRunMode = ((SkyStoneRobotHardware) hardware).liftMotor.getMode();
-            ((SkyStoneRobotHardware) hardware).liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             targetPos = ((SkyStoneRobotHardware) hardware).liftMotorStartingPos + pos;
             ((SkyStoneRobotHardware) hardware).liftMotor.setTargetPosition(targetPos);
+            prevRunMode = ((SkyStoneRobotHardware) hardware).liftMotor.getMode();
+            ((SkyStoneRobotHardware) hardware).liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
             if (((SkyStoneRobotHardware) hardware).liftMotor.getCurrentPosition() > targetPos) {
                 speed = -LIFT_SPEED;
             } else {

@@ -12,8 +12,8 @@ public class LowerLiftAction implements Action {
     public void init(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
-            skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             skyStoneRobotHardware.liftMotor.setTargetPosition(skyStoneRobotHardware.liftMotorStartingPos);
+            skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
 
@@ -22,9 +22,9 @@ public class LowerLiftAction implements Action {
         if (hardware instanceof SkyStoneRobotHardware) {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
             boolean busy = skyStoneRobotHardware.liftMotor.isBusy();
-            if (busy) {
+            if (!busy) {
                 skyStoneRobotHardware.liftMotor.setPower(0);
-                skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 return true;
             } else {
                 skyStoneRobotHardware.liftMotor.setPower(-0.5f);
