@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 public class LiftMotorAction implements Action {
 
-    final double LIFT_SPEED = 0.5f;
+    final double LIFT_SPEED = 0.75f;
     DcMotor.RunMode prevRunMode;
     int pos;
     double speed;

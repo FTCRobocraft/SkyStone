@@ -13,8 +13,8 @@ public class SkystoneHorizontalAlignAction implements Action {
         RIGHT
     }
 
-    static final double SCAN_SPEED = 0.3f;
-    static final double TOLERANCE = 10;
+    static final double SCAN_SPEED = 0.25f;
+    static final double TOLERANCE = 20;
 
 
     ScanDirection scanDirection;
@@ -44,7 +44,7 @@ public class SkystoneHorizontalAlignAction implements Action {
                 hardware.omniDrive.moveLeft(SCAN_SPEED);
             }
 
-            List<Recognition> updatedRecognitions = hardware.tfod.getUpdatedRecognitions();
+            List<Recognition> updatedRecognitions = hardware.tfod.getRecognitions();
             if (updatedRecognitions != null) {
                 hardware.opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
                 // step through the list of recognitions and display boundary info.

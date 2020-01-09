@@ -26,7 +26,7 @@ public class ServoTuner extends BaseHardware {
 
     @Override
     public void init() {
-        servos = new ArrayList<Servo>();
+        servos = new ArrayList<>();
         for (HardwareDevice device : hardwareMap.getAll(Servo.class)) {
             Servo servo = (Servo) device;
             servos.add(servo);

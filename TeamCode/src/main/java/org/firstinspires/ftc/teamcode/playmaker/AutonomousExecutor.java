@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public abstract class AutonomousExecutor extends OpMode {
 
-    private RobotHardware hardware;
+    public RobotHardware hardware;
     private ActionSequence actionSequence;
     private ActionExecutor actionExecutor;
 
@@ -17,12 +17,14 @@ public abstract class AutonomousExecutor extends OpMode {
         hardware = getHardware();
         hardware.initializeHardware();
         hardware.initializeAutonomous();
+        actionSequence = getActionSequence();
         actionExecutor = new ActionExecutor(hardware, actionSequence);
     }
 
     @Override
     public void loop() {
-        actionExecutor.loop();
+        boolean done = actionExecutor.loop();
+        if (done) requestOpModeStop();
     }
 
     @Override

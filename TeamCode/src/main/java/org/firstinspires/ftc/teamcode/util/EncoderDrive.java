@@ -17,7 +17,7 @@ public class EncoderDrive {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     ROBOT_DIAGONAL_LENGTH = 19.5;
+    static final double     ROBOT_DIAGONAL_LENGTH = Math.sqrt(Math.pow(12, 2) + Math.pow (18, 2));
     static final double     INCHES_PER_DEGREE = (ROBOT_DIAGONAL_LENGTH * Math.PI)/360;
 
     private OmniDrive omniDrive;

@@ -15,12 +15,14 @@ public class SetHorizontalArmAction implements Action {
         this.position = position;
     }
 
+    //120 counts per inch forward
+
     @Override
     public void init(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
             targetPosition = ((SkyStoneRobotHardware) hardware).horizontalGripStartingPos + position;
-            ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setTargetPosition(targetPosition);
+            ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
 
