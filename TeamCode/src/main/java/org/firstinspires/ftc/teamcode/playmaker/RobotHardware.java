@@ -15,6 +15,7 @@ public abstract class RobotHardware {
     public TFObjectDetector tfod;
     public OmniDrive omniDrive;
     public OpMode opMode;
+    public static double COUNTS_PER_INCH;
 
     public RobotHardware(OpMode opMode) {
         this.opMode = opMode;

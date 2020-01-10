@@ -29,6 +29,7 @@ public abstract class AutonomousExecutor extends OpMode {
 
     @Override
     public void stop() {
+        hardware.omniDrive.stopDrive();
         actionExecutor.stop();
     }
 }

@@ -73,6 +73,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     public SkyStoneRobotHardware(OpMode opMode) {
         super(opMode);
+        this.COUNTS_PER_INCH = 94.02384D;
     }
 
     @Override

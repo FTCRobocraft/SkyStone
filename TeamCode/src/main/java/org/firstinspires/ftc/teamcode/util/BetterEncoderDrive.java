@@ -14,8 +14,8 @@ public class BetterEncoderDrive {
     static final double     COUNTS_PER_MOTOR_REV    = 28;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 40;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+    //static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double     COUNTS_PER_INCH = 94.02384D;
     static final double     ROBOT_DIAGONAL_LENGTH = 19.5;
     static final double     INCHES_PER_DEGREE = (ROBOT_DIAGONAL_LENGTH * Math.PI)/360;
 
@@ -38,8 +38,9 @@ public class BetterEncoderDrive {
     private float BL_speed;
     private float BR_speed;
 
-    public final double SLOW_THRESHOLD = 100;
-    public final float SLOW_SPEED = 0.2f;
+    public final double SLOW_THRESHOLD = 5 * COUNTS_PER_INCH;
+    public final float SLOW_SPEED = 0.5f;
+    public final int ENCODER_THRESHOLD = 10;
 
     public BetterEncoderDrive(OmniDrive omniDrive) {
         this.omniDrive = omniDrive;
@@ -179,7 +180,7 @@ public class BetterEncoderDrive {
                     if (Math.abs(FL_targetPosition - frontLeftPos) <= SLOW_THRESHOLD) {
                         omniDrive.frontLeft.setPower(FL_speed < 0 ? -SLOW_SPEED : SLOW_SPEED);
                     } else {
-                        omniDrive.frontLeft.setPower(0);
+                        omniDrive.frontLeft.setPower(FL_speed);
                     }
                 }
 
@@ -187,7 +188,7 @@ public class BetterEncoderDrive {
                     if (Math.abs(FR_targetPosition - frontRightPos) <= SLOW_THRESHOLD) {
                         omniDrive.frontRight.setPower(FR_speed < 0 ? -SLOW_SPEED : SLOW_SPEED);
                     } else {
-                        omniDrive.frontRight.setPower(0);
+                        omniDrive.frontRight.setPower(FR_speed);
                     }
                 }
 
@@ -195,7 +196,7 @@ public class BetterEncoderDrive {
                     if (Math.abs(BL_targetPosition - backLeftPos) <= SLOW_THRESHOLD) {
                         omniDrive.backLeft.setPower(BL_speed < 0 ? -SLOW_SPEED : SLOW_SPEED);
                     } else {
-                        omniDrive.backLeft.setPower(0);
+                        omniDrive.backLeft.setPower(BL_speed);
                     }
                 }
 
@@ -203,7 +204,7 @@ public class BetterEncoderDrive {
                     if (Math.abs(BR_targetPosition - backRightPos) <= SLOW_THRESHOLD) {
                         omniDrive.backRight.setPower(BR_speed < 0 ? -SLOW_SPEED : SLOW_SPEED);
                     } else {
-                        omniDrive.backRight.setPower(0);
+                        omniDrive.backRight.setPower(BR_speed);
                     }
                 }
 
