@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.AutonomousExecutor;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-@Autonomous(name="BR - Fetch and Park")
-public class BlueRightExecutor extends AutonomousExecutor {
+@Autonomous(name="RR - Fetch and Park")
+public class RedRightExecutor extends AutonomousExecutor {
 
     SkyStoneRobotHardware robotHardware;
 
@@ -22,7 +22,7 @@ public class BlueRightExecutor extends AutonomousExecutor {
 
     @Override
     public ActionSequence getActionSequence() {
-        return new FetchAndParkSequence(BaseHardware.Team.BLUE, BaseHardware.StartingPosition.RIGHT);
+        return new FetchAndParkSequence(BaseHardware.Team.RED, BaseHardware.StartingPosition.RIGHT);
     }
 
     @Override
