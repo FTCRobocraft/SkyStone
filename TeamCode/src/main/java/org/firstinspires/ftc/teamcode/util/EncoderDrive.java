@@ -188,6 +188,108 @@ public class EncoderDrive {
         omniDrive.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void setCountsToDrive(OmniDrive.Direction direction, int counts, float power, double timeout) {
+        this.isBusy = true;
+        this.timeout = timeout;
+        this.runTime = new ElapsedTime();
+        this.runTime.reset();
+
+        this.previousRunMode = omniDrive.frontLeft.getMode();
+
+        switch (direction) {
+            case FORWARD:
+                FL_speed = power;
+                FR_speed = power;
+                BL_speed = power;
+                BR_speed = power;
+                break;
+
+            case BACKWARD:
+                FL_speed = -power;
+                FR_speed = -power;
+                BL_speed = -power;
+                BR_speed = -power;
+                break;
+
+            case LEFT:
+                FL_speed = -power;
+                FR_speed = power;
+                BL_speed = power;
+                BR_speed = -power;
+                break;
+
+            case RIGHT:
+                FL_speed = power;
+                FR_speed = -power;
+                BL_speed = -power;
+                BR_speed = power;
+                break;
+
+            case FORWARD_LEFT:
+                FL_speed = 0;
+                FR_speed = power;
+                BL_speed = power;
+                BR_speed = 0;
+                break;
+
+            case FORWARD_RIGHT:
+                FL_speed = power;
+                FR_speed = 0;
+                BL_speed = 0;
+                BR_speed = power;
+                break;
+
+            case BACKWARD_LEFT:
+                FL_speed = 0;
+                FR_speed = -power;
+                BL_speed = -power;
+                BR_speed = 0;
+                break;
+
+            case BACKWARD_RIGHT:
+                FL_speed = -power;
+                FR_speed = 0;
+                BL_speed = 0;
+                BR_speed = -power;
+                break;
+
+            case ROTATE_LEFT:
+                FL_speed = -power;
+                FR_speed = power;
+                BL_speed = -power;
+                BR_speed = power;
+                break;
+
+            case ROTATE_RIGHT:
+                FL_speed = power;
+                FR_speed = -power;
+                BL_speed = power;
+                BR_speed = -power;
+                break;
+
+        }
+
+        int FL_direction = (FL_speed > 0) ? 1 : (FL_speed < 0) ? -1 : 0;
+        int FR_direction = (FR_speed > 0) ? 1 : (FR_speed < 0) ? -1 : 0;
+        int BL_direction = (BL_speed > 0) ? 1 : (BL_speed < 0) ? -1 : 0;
+        int BR_direction = (BR_speed > 0) ? 1 : (BR_speed < 0) ? -1 : 0;
+
+        FL_targetPosition = omniDrive.frontLeft.getCurrentPosition() + FL_direction * counts;
+        FR_targetPosition = omniDrive.frontRight.getCurrentPosition() + FR_direction * counts;
+        BL_targetPosition = omniDrive.backLeft.getCurrentPosition() + BL_direction * counts;
+        BR_targetPosition = omniDrive.backRight.getCurrentPosition() + BR_direction * counts;
+
+        omniDrive.frontLeft.setTargetPosition(FL_targetPosition);
+        omniDrive.frontRight.setTargetPosition(FR_targetPosition);
+        omniDrive.backLeft.setTargetPosition(BL_targetPosition);
+        omniDrive.backRight.setTargetPosition(BR_targetPosition);
+
+        omniDrive.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        omniDrive.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        omniDrive.backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        omniDrive.backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void run(RobotHardware hardware) {
         if (this.isBusy) {
             boolean busy = omniDrive.frontLeft.isBusy() || omniDrive.frontRight.isBusy()

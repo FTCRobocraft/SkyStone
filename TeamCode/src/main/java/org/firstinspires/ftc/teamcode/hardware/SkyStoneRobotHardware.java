@@ -25,7 +25,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public static final float CAM_Y_ROTATION = -90f;
     public static final float CAM_Z_ROTATION = 0f;
 
-    public static final double GRIP_TIME = 1000;
+    public static final double GRIP_TIME = 500;
 
     public static final int HORIZONTAL_GRIP_RANGE = 400;
     public static final int LIFT_RANGE = 1200;
@@ -74,6 +74,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public SkyStoneRobotHardware(OpMode opMode) {
         super(opMode);
         this.COUNTS_PER_INCH = 94.02384D;
+        this.COUNTS_PER_DEGREE = (COUNTS_PER_INCH * Math.PI * 21.77298) / 360D;
     }
 
     @Override
@@ -105,8 +106,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
         capStone = initializeDevice(Servo.class, "capStone");
 
-        horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
-        liftMotorStartingPos = liftMotor.getCurrentPosition();
+        setStartingPos();
 
     }
 
@@ -135,6 +135,11 @@ public class SkyStoneRobotHardware extends RobotHardware {
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public void setStartingPos() {
+        horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
+        liftMotorStartingPos = liftMotor.getCurrentPosition();
     }
 
     public void startTracking() {

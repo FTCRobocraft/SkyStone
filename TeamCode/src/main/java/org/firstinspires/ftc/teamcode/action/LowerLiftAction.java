@@ -27,7 +27,7 @@ public class LowerLiftAction implements Action {
                 skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 return true;
             } else {
-                skyStoneRobotHardware.liftMotor.setPower(-0.5f);
+                skyStoneRobotHardware.liftMotor.setPower(-1f);
                 return false;
             }
         } else {

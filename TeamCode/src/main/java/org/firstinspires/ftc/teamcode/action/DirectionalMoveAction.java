@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.action;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -13,9 +13,9 @@ public class DirectionalMoveAction implements Action {
     double distance;
     float speed;
 
-    final int ENCODER_THRESHOLD = 10;
+    final int ENCODER_THRESHOLD = 20;
     int SLOW_COUNTS;
-    final float SLOW_SPEED = 0.02f;
+    final float SLOW_SPEED = 0.1f;
     float SPEED_SLOPE;
 
     int FL_target = 0;

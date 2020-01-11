@@ -15,9 +15,6 @@ public class MecanumRotationAction implements Action {
     private float speed;
     EncoderDrive encoderDrive;
 
-    public final double INCHES_PER_DEGREE = 66.1/360;
-
-
     public MecanumRotationAction(int degrees, float speed) {
         this.degrees = degrees;
         this.speed = speed;
@@ -25,13 +22,13 @@ public class MecanumRotationAction implements Action {
 
     @Override
     public void init(RobotHardware hardware) {
-        double distance = INCHES_PER_DEGREE * degrees;
+        int distance = (int) (hardware.COUNTS_PER_DEGREE * degrees);
         encoderDrive = new EncoderDrive(hardware.omniDrive);
         if (distance < 0) {
             distance = -distance;
-            encoderDrive.setInchesToDrive(OmniDrive.Direction.ROTATE_LEFT, distance, speed, 1500);
+            encoderDrive.setCountsToDrive(OmniDrive.Direction.ROTATE_LEFT, distance, speed, 1500);
         } else {
-            encoderDrive.setInchesToDrive(OmniDrive.Direction.ROTATE_RIGHT, distance, speed, 1500);
+            encoderDrive.setCountsToDrive(OmniDrive.Direction.ROTATE_RIGHT, distance, speed, 1500);
         }
     }
 

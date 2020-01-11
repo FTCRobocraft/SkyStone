@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.sequences;
 
-import org.firstinspires.ftc.teamcode.DirectionalMoveAction;
-import org.firstinspires.ftc.teamcode.action.BetterMoveAction;
-import org.firstinspires.ftc.teamcode.action.GripAction;
-import org.firstinspires.ftc.teamcode.action.LiftMotorAction;
-import org.firstinspires.ftc.teamcode.action.LowerLiftAction;
-import org.firstinspires.ftc.teamcode.action.RotateCameraAction;
-import org.firstinspires.ftc.teamcode.action.SkystoneHorizontalAlignAction;
+import org.firstinspires.ftc.teamcode.action.DirectionalMoveAction;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.util.OmniDrive;
 

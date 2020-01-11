@@ -44,17 +44,6 @@ public class SkystoneHybridOp extends HybridOp {
                 }
         ));
 
-        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
-                GamepadType.ONE, GamepadButtons.back,
-                () ->  {
-                    useLimits = false;
-                }, () -> {
-                    useLimits = true;
-                }
-        ));
-
-
-
         //endregion
 
         // region Gamepad 2
@@ -67,12 +56,6 @@ public class SkystoneHybridOp extends HybridOp {
                 }, () -> {
                     skyStoneRobotHardware.gripServo.setPosition(0);
                 }
-        ));
-
-        gamepadController.addGamepadListener(GamepadListener.createAutoTrigger(
-                GamepadType.TWO, GamepadButtons.b,
-                this,
-                new PickUpStoneSequence()
         ));
 
         // Lift Motor to Start
@@ -150,6 +133,20 @@ public class SkystoneHybridOp extends HybridOp {
                     skyStoneRobotHardware.capStone.setPosition(0.5);
                 }
         ));
+
+        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
+                GamepadType.TWO, GamepadButtons.start,
+                () ->  {
+                    useLimits = false;
+                }, () -> {
+                    useLimits = true;
+                }
+        ));
+
+        gamepadController.addGamepadListener(GamepadListener.createPressListener(GamepadType.TWO, GamepadButtons.right_stick_button,
+                () -> {
+                    skyStoneRobotHardware.setStartingPos();
+                }));
 
     }
 

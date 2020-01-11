@@ -16,6 +16,7 @@ public abstract class RobotHardware {
     public OmniDrive omniDrive;
     public OpMode opMode;
     public static double COUNTS_PER_INCH;
+    public static double COUNTS_PER_DEGREE;
 
     public RobotHardware(OpMode opMode) {
         this.opMode = opMode;
