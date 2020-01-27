@@ -54,7 +54,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
 
     //Servos
-    public Servo capStone;
+    public CRServo capStone;
+    public boolean capGrip = false;
 
     //endregion
 
@@ -104,7 +105,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
         horizontalGripMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
 
-        capStone = initializeDevice(Servo.class, "capStone");
+        capStone = initializeDevice(CRServo.class, "capStone");
 
         setStartingPos();
 
@@ -132,7 +133,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
         int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
+        tfodParameters.minimumConfidence = 0.6;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
@@ -196,6 +197,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
         if (isTracking && cameraNavigation != null) {
             cameraNavigation.camera_loop();
         }
+
+        capStone.setPower(capGrip ? 1 : -0.05);
 
         opMode.telemetry.addData("isTracking", isTracking);
         opMode.telemetry.addData("lift mode", liftMotor.getMode());

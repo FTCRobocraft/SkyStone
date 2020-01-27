@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hybridop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.playmaker.HybridOp;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 @TeleOp(name="Arm")
+@Disabled
 public class ArmHybridOp extends HybridOp {
 
     AdamHardware hardware;

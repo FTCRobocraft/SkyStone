@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.action;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
@@ -38,6 +40,8 @@ public class SkystoneHorizontalAlignAction implements Action {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
 
+            hardware.omniDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             if (scanDirection == ScanDirection.RIGHT) {
                 hardware.omniDrive.moveRight(SCAN_SPEED);
             } else {
@@ -75,6 +79,7 @@ public class SkystoneHorizontalAlignAction implements Action {
                     hardware.opMode.telemetry.addData("center displacement", centerDisplacement);
                     if (Math.abs(centerDisplacement) <= TOLERANCE) {
                         hardware.omniDrive.stopDrive();
+                        hardware.omniDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         return true;
                     }
                 }

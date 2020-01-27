@@ -2,32 +2,27 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.autonomous.sequences.FetchAndParkSequence;
+import org.firstinspires.ftc.teamcode.autonomous.sequences.ParkSequence;
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.AutonomousExecutor;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-@Autonomous(name="BR - Fetch and Park")
-public class BlueRightExecutor extends AutonomousExecutor {
+@Autonomous(name = "BR - Park")
+public class BRParkExecutor extends AutonomousExecutor {
 
-    SkyStoneRobotHardware robotHardware;
+    SkyStoneRobotHardware skyStoneRobotHardware;
 
     @Override
     public RobotHardware getHardware() {
-        robotHardware = new SkyStoneRobotHardware(this);
-        return robotHardware;
+        skyStoneRobotHardware = new SkyStoneRobotHardware(this);
+        return skyStoneRobotHardware;
     }
 
     @Override
     public ActionSequence getActionSequence() {
-        return new FetchAndParkSequence(BaseHardware.Team.BLUE, BaseHardware.StartingPosition.RIGHT);
+        return new ParkSequence(BaseHardware.Team.BLUE, BaseHardware.StartingPosition.RIGHT);
     }
 
-    @Override
-    public void init() {
-        super.init();
-        robotHardware.startTracking();
-    }
 }

@@ -125,12 +125,12 @@ public class SkystoneHybridOp extends HybridOp {
                 }));
 
         // Release capstone
-        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
+        gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(
                 GamepadType.TWO, GamepadButtons.back,
                 () ->  {
-                    skyStoneRobotHardware.capStone.setPosition(1);
+                    skyStoneRobotHardware.capGrip = true;
                 }, () -> {
-                    skyStoneRobotHardware.capStone.setPosition(0.5);
+                    skyStoneRobotHardware.capGrip = false;
                 }
         ));
 

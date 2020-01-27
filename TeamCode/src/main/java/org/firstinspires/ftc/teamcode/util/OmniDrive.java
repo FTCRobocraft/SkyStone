@@ -158,6 +158,13 @@ public class OmniDrive {
         backRight.setPower(0);
     }
 
+    public void setMode(DcMotor.RunMode runMode) {
+        frontLeft.setMode(runMode);
+        frontRight.setMode(runMode);
+        backLeft.setMode(runMode);
+        backRight.setMode(runMode);
+    }
+
     public void dpadMove(Gamepad gamepad, float power, boolean reverse) {
         if (reverse) {
             if (gamepad.dpad_up && gamepad.dpad_left) {
