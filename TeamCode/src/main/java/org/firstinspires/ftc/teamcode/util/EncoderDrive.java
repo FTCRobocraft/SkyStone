@@ -292,8 +292,8 @@ public class EncoderDrive {
 
     public void run(RobotHardware hardware) {
         if (this.isBusy) {
-            boolean busy = omniDrive.frontLeft.isBusy() || omniDrive.frontRight.isBusy()
-                    || omniDrive.backLeft.isBusy() || omniDrive.backRight.isBusy();
+            boolean busy = omniDrive.frontLeft.isBusy() && omniDrive.frontRight.isBusy()
+                    && omniDrive.backLeft.isBusy() && omniDrive.backRight.isBusy();
 
             if (busy && this.runTime.milliseconds() <= this.timeout) {
                 omniDrive.frontLeft.setPower(FL_speed);

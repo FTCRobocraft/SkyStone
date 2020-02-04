@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -28,8 +27,23 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public static final double GRIP_TIME = 500;
 
     public static final int HORIZONTAL_GRIP_RANGE = 400;
-    public static final int LIFT_RANGE = 1200;
+    public static final int LIFT_RANGE = 950;
     public static final int LIFT_RAISED = 400;
+    public static final float LIFT_STANDBY_POWER = 0f;
+
+    public static final float LEFT_PLATFORM_DOWN = 0.5f;
+    public static final float RIGHT_PLATFORM_DOWN = 0.5f;
+    public static final float LEFT_PLATFORM_UP = 1f;
+    public static final float RIGHT_PLATFORM_UP = 0f;
+
+    public enum SkystoneStartingPosition {
+        LEFT_LEFT,
+        LEFT_RIGHT,
+        RIGHT_LEFT,
+        RIGHT_RIGHT
+    }
+
+    public boolean useLimits = true;
     //endregion
 
     //region hardware
@@ -45,7 +59,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public Servo gripServo;
 
     // Lift motors
-    public DcMotor liftMotor;
+    public DcMotor leftLiftMotor;
+    public DcMotor rightLiftMotor;
 
     // Cameras
     public WebcamName webcam;
@@ -56,6 +71,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
     //Servos
     public CRServo capStone;
     public boolean capGrip = false;
+
+    public Servo leftPlatform;
+    public Servo rightPlatform;
 
     //endregion
 
@@ -69,7 +87,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
     boolean isTracking = false;
 
     public int horizontalGripStartingPos;
-    public int liftMotorStartingPos;
+    public int leftLiftMotorStartingPos;
+    public int rightLiftMotorStartingPos;
 
 
     public SkyStoneRobotHardware(OpMode opMode) {
@@ -99,8 +118,11 @@ public class SkyStoneRobotHardware extends RobotHardware {
             backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         }
         backRight = initializeDevice(DcMotor.class, "backRight");
-        liftMotor = initializeDevice(DcMotor.class, "liftMotor");
+        leftLiftMotor = initializeDevice(DcMotor.class, "leftLiftMotor");
+        rightLiftMotor = initializeDevice(DcMotor.class, "rightLiftMotor");
         gripServo = initializeDevice(Servo.class, "gripServo");
+        leftPlatform = initializeDevice(Servo.class, "leftPlatform");
+        rightPlatform = initializeDevice(Servo.class, "rightPlatform");
         horizontalGripMotor = initializeDevice(DcMotor.class, "horizontalGrip");
         horizontalGripMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         omniDrive = new OmniDrive(frontLeft, frontRight, backLeft, backRight);
@@ -140,7 +162,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     public void setStartingPos() {
         horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
-        liftMotorStartingPos = liftMotor.getCurrentPosition();
+        leftLiftMotorStartingPos = leftLiftMotor.getCurrentPosition();
     }
 
     public void startTracking() {
@@ -168,7 +190,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public void setHorizontalGripPower(double power) {
         int currentPos = horizontalGripMotor.getCurrentPosition();
 
-        if (currentPos <= horizontalGripStartingPos) {
+        if (!useLimits) {
+            horizontalGripMotor.setPower(power);
+        } else if (currentPos <= horizontalGripStartingPos) {
             horizontalGripMotor.setPower(Math.max(0, power));
         } else if (currentPos >= horizontalGripStartingPos + HORIZONTAL_GRIP_RANGE) {
             horizontalGripMotor.setPower(Math.min(0, power));
@@ -178,18 +202,34 @@ public class SkyStoneRobotHardware extends RobotHardware {
     }
 
     public void setLiftPower(double power) {
-        int currentPos = liftMotor.getCurrentPosition();
+        int currentPos = leftLiftMotor.getCurrentPosition();
 
-        if (currentPos <= liftMotorStartingPos) {
-            liftMotor.setPower(Math.max(0D, power));
-            opMode.telemetry.addData("MAX", Math.max(0D, power));
-        } else if (currentPos >= liftMotorStartingPos + LIFT_RANGE) {
-            liftMotor.setPower(Math.min(0D, power));
-            opMode.telemetry.addData("MIN", Math.min(0D, power));
+        if (!useLimits) {
+            leftLiftMotor.setPower(power);
+            rightLiftMotor.setPower(power);
+        } else if (currentPos <= leftLiftMotorStartingPos) {
+            leftLiftMotor.setPower(Math.max(0, power));
+            rightLiftMotor.setPower(Math.max(0, power));
+            opMode.telemetry.addData("MAX", Math.max(0, power));
+        } else if (currentPos >= leftLiftMotorStartingPos + LIFT_RANGE) {
+            leftLiftMotor.setPower(Math.min(0, power));
+            rightLiftMotor.setPower(Math.min(0, power));
+            opMode.telemetry.addData("MIN", Math.min(0, power));
         } else {
-            liftMotor.setPower(power);
+            leftLiftMotor.setPower(power);
+            rightLiftMotor.setPower(power);
             opMode.telemetry.addData("POWER", power);
         }
+    }
+
+    public void lowerPlatformGrip() {
+        leftPlatform.setPosition(LEFT_PLATFORM_DOWN);
+        rightPlatform.setPosition(RIGHT_PLATFORM_DOWN);
+    }
+
+    public void raisePlatformGrip() {
+        leftPlatform.setPosition(LEFT_PLATFORM_UP);
+        rightPlatform.setPosition(RIGHT_PLATFORM_UP);
     }
 
     @Override
@@ -198,15 +238,19 @@ public class SkyStoneRobotHardware extends RobotHardware {
             cameraNavigation.camera_loop();
         }
 
-        capStone.setPower(capGrip ? 1 : -0.05);
+        capStone.setPower(capGrip ? 1 : -0.08);
+
 
         opMode.telemetry.addData("isTracking", isTracking);
-        opMode.telemetry.addData("lift mode", liftMotor.getMode());
+        opMode.telemetry.addData("limits enabled", useLimits);
+        opMode.telemetry.addData("cap grip", capGrip);
 
-        opMode.telemetry.addData("Lift Start Pos", liftMotorStartingPos);
+        opMode.telemetry.addData("LL Start Pos", leftLiftMotorStartingPos);
+        opMode.telemetry.addData("RL Start Pos", rightLiftMotorStartingPos);
         opMode.telemetry.addData("Grip Start Pos", horizontalGripStartingPos);
         opMode.telemetry.addData("Horizontal Grip", horizontalGripMotor.getCurrentPosition());
-        opMode.telemetry.addData("Lift Motor", liftMotor.getCurrentPosition());
+        opMode.telemetry.addData("Left Lift", leftLiftMotor.getCurrentPosition());
+        opMode.telemetry.addData("Right Lift", rightLiftMotor.getCurrentPosition());
         opMode.telemetry.addData("Grip Servo", gripServo.getPosition());
         opMode.telemetry.addData("Camera Servo", cameraServo.getPosition());
 

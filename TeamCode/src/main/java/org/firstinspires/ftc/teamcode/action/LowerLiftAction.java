@@ -12,8 +12,8 @@ public class LowerLiftAction implements Action {
     public void init(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
-            skyStoneRobotHardware.liftMotor.setTargetPosition(skyStoneRobotHardware.liftMotorStartingPos);
-            skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            skyStoneRobotHardware.leftLiftMotor.setTargetPosition(skyStoneRobotHardware.leftLiftMotorStartingPos);
+            skyStoneRobotHardware.leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
     }
 
@@ -21,13 +21,13 @@ public class LowerLiftAction implements Action {
     public boolean doAction(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
-            boolean busy = skyStoneRobotHardware.liftMotor.isBusy();
+            boolean busy = skyStoneRobotHardware.leftLiftMotor.isBusy();
             if (!busy) {
-                skyStoneRobotHardware.liftMotor.setPower(0);
-                skyStoneRobotHardware.liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                skyStoneRobotHardware.leftLiftMotor.setPower(0);
+                skyStoneRobotHardware.leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 return true;
             } else {
-                skyStoneRobotHardware.liftMotor.setPower(-1f);
+                skyStoneRobotHardware.leftLiftMotor.setPower(-1f);
                 return false;
             }
         } else {

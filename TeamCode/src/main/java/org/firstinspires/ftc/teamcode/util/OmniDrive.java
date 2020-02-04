@@ -183,6 +183,8 @@ public class OmniDrive {
                 moveLeft(power);
             } else if (gamepad.dpad_down) {
                 moveForward(power);
+            } else {
+                stopDrive();
             }
         } else {
             if (gamepad.dpad_up && gamepad.dpad_left) {
@@ -201,6 +203,8 @@ public class OmniDrive {
                 moveRight(power);
             } else if (gamepad.dpad_down) {
                 moveBackward(power);
+            } else {
+                stopDrive();
             }
         }
 

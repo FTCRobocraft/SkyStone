@@ -9,28 +9,34 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 public class LiftMotorAction implements Action {
 
     final double LIFT_SPEED = 1f;
-    int pos;
-    double speed;
-    int targetPos;
+    int height;
+
+    int leftTargetPos;
+    int rightTargetPos;
     static final double TIMEOUT = 3000;
     double endTime;
 
     public LiftMotorAction(int pos) {
-        this.pos = pos;
+        this.height = pos;
     }
 
     @Override
     public void init(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
-            targetPos = ((SkyStoneRobotHardware) hardware).liftMotorStartingPos + pos;
-            ((SkyStoneRobotHardware) hardware).liftMotor.setTargetPosition(targetPos);
-            ((SkyStoneRobotHardware) hardware).liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // Cast RobotHardware to SkyStoneRobotHardware
+            SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
 
-            if (((SkyStoneRobotHardware) hardware).liftMotor.getCurrentPosition() > targetPos) {
-                speed = -LIFT_SPEED;
-            } else {
-                speed = LIFT_SPEED;
-            }
+            // Calculate target positions
+            leftTargetPos = skyStoneRobotHardware.leftLiftMotorStartingPos + height;
+            rightTargetPos = skyStoneRobotHardware.rightLiftMotorStartingPos + height;
+
+            // Set motor target positions
+            skyStoneRobotHardware.leftLiftMotor.setTargetPosition(leftTargetPos);
+            skyStoneRobotHardware.rightLiftMotor.setTargetPosition(rightTargetPos);
+
+            // Set motors to RUN_TO_POSITION
+            skyStoneRobotHardware.leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            skyStoneRobotHardware.rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             endTime = System.currentTimeMillis() + TIMEOUT;
         }
@@ -39,16 +45,26 @@ public class LiftMotorAction implements Action {
     @Override
     public boolean doAction(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
-            boolean busy = ((SkyStoneRobotHardware) hardware).liftMotor.isBusy();
+            SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
+            boolean busy = skyStoneRobotHardware.leftLiftMotor.isBusy() || skyStoneRobotHardware.rightLiftMotor.isBusy();
             if (busy) {
-                ((SkyStoneRobotHardware) hardware).liftMotor.setPower(speed);
+                // Set power to lifts
+                skyStoneRobotHardware.leftLiftMotor.setPower(LIFT_SPEED);
+                skyStoneRobotHardware.rightLiftMotor.setPower(LIFT_SPEED);
             } else {
-                ((SkyStoneRobotHardware) hardware).liftMotor.setPower(0);
-                ((SkyStoneRobotHardware) hardware).liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                // Stop lifts and reset their modes back to RUN_WITHOUT_ENCODER
+                skyStoneRobotHardware.leftLiftMotor.setPower(0);
+                skyStoneRobotHardware.rightLiftMotor.setPower(0);
+                skyStoneRobotHardware.leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                skyStoneRobotHardware.rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
-            hardware.opMode.telemetry.addData("target pos", targetPos);
-            hardware.opMode.telemetry.addData("current pos", ((SkyStoneRobotHardware) hardware).liftMotor.getCurrentPosition());
+            // Log telemetry data
+            hardware.opMode.telemetry.addData("left target height", leftTargetPos);
+            hardware.opMode.telemetry.addData("right target height", rightTargetPos);
+
+            hardware.opMode.telemetry.addData("left height", skyStoneRobotHardware.leftLiftMotor.getCurrentPosition());
+            hardware.opMode.telemetry.addData("right height", skyStoneRobotHardware.rightLiftMotor.getCurrentPosition());
 
             return !busy || System.currentTimeMillis() >= endTime;
         } else {
