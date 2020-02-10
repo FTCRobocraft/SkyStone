@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.action;
+package org.firstinspires.ftc.teamcode.action.deprecated;
 
 import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
+@Deprecated
 public class RotateCameraAction implements Action {
 
 

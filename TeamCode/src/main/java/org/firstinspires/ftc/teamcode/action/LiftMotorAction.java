@@ -9,15 +9,15 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 public class LiftMotorAction implements Action {
 
     final double LIFT_SPEED = 1f;
-    int height;
+    int distance;
 
     int leftTargetPos;
     int rightTargetPos;
-    static final double TIMEOUT = 3000;
+    static final double TIMEOUT = 2000;
     double endTime;
 
-    public LiftMotorAction(int pos) {
-        this.height = pos;
+    public LiftMotorAction(double height) {
+        this.distance = (int) (height * SkyStoneRobotHardware.COUNTS_PER_LIFT_IN);
     }
 
     @Override
@@ -27,8 +27,8 @@ public class LiftMotorAction implements Action {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
 
             // Calculate target positions
-            leftTargetPos = skyStoneRobotHardware.leftLiftMotorStartingPos + height;
-            rightTargetPos = skyStoneRobotHardware.rightLiftMotorStartingPos + height;
+            leftTargetPos = skyStoneRobotHardware.leftLiftMotorStartingPos + distance;
+            rightTargetPos = skyStoneRobotHardware.rightLiftMotorStartingPos + distance;
 
             // Set motor target positions
             skyStoneRobotHardware.leftLiftMotor.setTargetPosition(leftTargetPos);
@@ -46,7 +46,7 @@ public class LiftMotorAction implements Action {
     public boolean doAction(RobotHardware hardware) {
         if (hardware instanceof SkyStoneRobotHardware) {
             SkyStoneRobotHardware skyStoneRobotHardware = (SkyStoneRobotHardware) hardware;
-            boolean busy = skyStoneRobotHardware.leftLiftMotor.isBusy() || skyStoneRobotHardware.rightLiftMotor.isBusy();
+            boolean busy = skyStoneRobotHardware.leftLiftMotor.isBusy() && skyStoneRobotHardware.rightLiftMotor.isBusy();
             if (busy) {
                 // Set power to lifts
                 skyStoneRobotHardware.leftLiftMotor.setPower(LIFT_SPEED);

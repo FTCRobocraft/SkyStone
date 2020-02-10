@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 /**
@@ -12,14 +13,7 @@ import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
 public class EncoderDrive {
 
-    static final double     COUNTS_PER_MOTOR_REV    = 28;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 40;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     ROBOT_DIAGONAL_LENGTH = Math.sqrt(Math.pow(12, 2) + Math.pow (18, 2));
-    static final double     INCHES_PER_DEGREE = (ROBOT_DIAGONAL_LENGTH * Math.PI)/360;
-
+    private RobotHardware robotHardware;
     private OmniDrive omniDrive;
     public boolean isBusy = false;
 
@@ -63,18 +57,9 @@ public class EncoderDrive {
 
     }
 
-    public EncoderDrive(OmniDrive omniDrive) {
-        this.omniDrive = omniDrive;
-    }
-
-    public void setDegreesToDrive(int degrees, float speed, double timeout) {
-        double distance = INCHES_PER_DEGREE * degrees;
-        if (distance < 0) {
-            distance = -distance;
-            setInchesToDrive(OmniDrive.Direction.ROTATE_LEFT, distance, speed, timeout);
-        } else {
-            setInchesToDrive(OmniDrive.Direction.ROTATE_RIGHT, distance, speed, timeout);
-        }
+    public EncoderDrive(RobotHardware robotHardware) {
+        this.robotHardware = robotHardware;
+        this.omniDrive = robotHardware.omniDrive;
     }
 
     /**
@@ -172,10 +157,19 @@ public class EncoderDrive {
         int BL_direction = (BL_speed > 0) ? 1 : (BL_speed < 0) ? -1 : 0;
         int BR_direction = (BR_speed > 0) ? 1 : (BR_speed < 0) ? -1 : 0;
 
-        FL_targetPosition = omniDrive.frontLeft.getCurrentPosition() + FL_direction * (int)(COUNTS_PER_INCH * distance);
-        FR_targetPosition = omniDrive.frontRight.getCurrentPosition() + FR_direction * (int)(COUNTS_PER_INCH * distance);
-        BL_targetPosition = omniDrive.backLeft.getCurrentPosition() + BL_direction * (int)(COUNTS_PER_INCH * distance);
-        BR_targetPosition = omniDrive.backRight.getCurrentPosition() + BR_direction * (int)(COUNTS_PER_INCH * distance);
+        if (direction == OmniDrive.Direction.LEFT || direction == OmniDrive.Direction.RIGHT) {
+            FL_targetPosition = omniDrive.frontLeft.getCurrentPosition() + FL_direction * (int)(robotHardware.COUNTS_PER_LAT_INCH * distance);
+            FR_targetPosition = omniDrive.frontRight.getCurrentPosition() + FR_direction * (int)(robotHardware.COUNTS_PER_LAT_INCH * distance);
+            BL_targetPosition = omniDrive.backLeft.getCurrentPosition() + BL_direction * (int)(robotHardware.COUNTS_PER_LAT_INCH * distance);
+            BR_targetPosition = omniDrive.backRight.getCurrentPosition() + BR_direction * (int)(robotHardware.COUNTS_PER_LAT_INCH * distance);
+        } else {
+            FL_targetPosition = omniDrive.frontLeft.getCurrentPosition() + FL_direction * (int)(robotHardware.COUNTS_PER_INCH * distance);
+            FR_targetPosition = omniDrive.frontRight.getCurrentPosition() + FR_direction * (int)(robotHardware.COUNTS_PER_INCH * distance);
+            BL_targetPosition = omniDrive.backLeft.getCurrentPosition() + BL_direction * (int)(robotHardware.COUNTS_PER_INCH * distance);
+            BR_targetPosition = omniDrive.backRight.getCurrentPosition() + BR_direction * (int)(robotHardware.COUNTS_PER_INCH * distance);
+        }
+
+
 
         omniDrive.frontLeft.setTargetPosition(FL_targetPosition);
         omniDrive.frontRight.setTargetPosition(FR_targetPosition);

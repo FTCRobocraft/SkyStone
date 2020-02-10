@@ -18,6 +18,15 @@ public class MoveAction implements Action {
 
     private EncoderDrive driver;
 
+
+
+    public MoveAction(OmniDrive.Direction direction, double distance, float speed) {
+        this.direction = direction;
+        this.distance = distance;
+        this.speed = speed;
+        this.timeout = 30000;
+    }
+
     /**
      * This action allows you to move the robot in any of the eight directions for a set distance.
      *
@@ -26,6 +35,7 @@ public class MoveAction implements Action {
      * @param speed How much power is given to each motor.
      * @param timeout Timeout in case the motors act up.
      */
+
     public MoveAction(OmniDrive.Direction direction, double distance, float speed, double timeout) {
         this.direction = direction;
         this.distance = distance;
@@ -42,7 +52,7 @@ public class MoveAction implements Action {
     }
 
     public void init(RobotHardware hardware) {
-        driver = new EncoderDrive(hardware.omniDrive);
+        driver = new EncoderDrive(hardware);
         driver.setInchesToDrive(direction, distance, speed, timeout);
     }
 

@@ -1,11 +1,13 @@
-package org.firstinspires.ftc.teamcode.action;
+package org.firstinspires.ftc.teamcode.action.deprecated;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.teamcode.hardware.SkyStoneRobotHardware;
 import org.firstinspires.ftc.teamcode.playmaker.Action;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.EncoderDrive;
 
-public class AlignYAction implements Action {
+@Deprecated
+public class AlignXAction implements Action {
 
     public enum AlignDirection {
         FRONT_BACK,
@@ -20,7 +22,7 @@ public class AlignYAction implements Action {
     final double SLOW_SPEED = 0.2f;
     final float DEADZONE = 5;
 
-    public AlignYAction(float pos, AlignDirection alignDirection, double speed) {
+    public AlignXAction(float pos, AlignDirection alignDirection, double speed) {
         this.pos = pos;
         this.alignDirection = alignDirection;
         this.speed = speed;
@@ -39,10 +41,10 @@ public class AlignYAction implements Action {
             VectorF currentPosition = ((SkyStoneRobotHardware) hardware).cameraNavigation.getRobotPosition();
             float distanceToTarget;
             boolean moveInPosDirection;
-            float currentY = currentPosition.get(1);
+            float currentX = currentPosition.get(0);
 
-            distanceToTarget = this.pos - currentY;
-            moveInPosDirection = this.pos > currentY;
+            distanceToTarget = this.pos - currentX;
+            moveInPosDirection = this.pos > currentX;
             if (Math.abs(distanceToTarget) <= DEADZONE) {
                 return true;
             } else {
@@ -57,9 +59,9 @@ public class AlignYAction implements Action {
             }
 
             return false;
+        } else {
+            return true;
         }
-
-        return true;
     }
 
     public Double progress() {

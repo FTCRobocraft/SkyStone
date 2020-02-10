@@ -16,6 +16,7 @@ public class SkystoneHybridOp extends HybridOp {
 
     private static final float DPAD_POWER = 1f;
     private static final float SLOW_DPAD_POWER = 0.4f;
+    private static final float LIFT_POWER = 0.75f;
     boolean reverseMode = false;
     boolean slowMode = true;
     private SkyStoneRobotHardware skyStoneRobotHardware;
@@ -76,7 +77,7 @@ public class SkystoneHybridOp extends HybridOp {
         gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(
                 GamepadType.TWO, GamepadButtons.dpad_up,
                 () -> {
-                    skyStoneRobotHardware.setLiftPower(1);
+                    skyStoneRobotHardware.setLiftPower(LIFT_POWER);
                 }, () -> {
                     skyStoneRobotHardware.setLiftPower(skyStoneRobotHardware.LIFT_STANDBY_POWER);
                 }));
@@ -85,7 +86,7 @@ public class SkystoneHybridOp extends HybridOp {
         gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(
                 GamepadType.TWO, GamepadButtons.dpad_down,
                 () -> {
-                    skyStoneRobotHardware.setLiftPower(-1);
+                    skyStoneRobotHardware.setLiftPower(-LIFT_POWER);
                 }, () -> {
                     skyStoneRobotHardware.setLiftPower(skyStoneRobotHardware.LIFT_STANDBY_POWER);
                 }));
@@ -118,7 +119,7 @@ public class SkystoneHybridOp extends HybridOp {
                 }
         ));
 
-        gamepadController.addGamepadListener(GamepadListener.createToggleListener(
+        gamepadController.addGamepadListener(GamepadListener.createHoldAndReleaseListener(
                 GamepadType.TWO, GamepadButtons.start,
                 () ->  {
                     skyStoneRobotHardware.useLimits = false;

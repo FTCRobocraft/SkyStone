@@ -23,11 +23,14 @@ public class BulkExecuteAction implements Action {
     @Override
     public boolean doAction(RobotHardware hardware) {
         boolean done = true;
+        String notDone = "";
         for (Action action : actions) {
             if (!action.doAction(hardware)) {
                 done = false;
+                notDone += action.getClass().getSimpleName() + ", ";
             }
         }
+        hardware.opMode.telemetry.addData("not done", notDone);
         return done;
     }
 

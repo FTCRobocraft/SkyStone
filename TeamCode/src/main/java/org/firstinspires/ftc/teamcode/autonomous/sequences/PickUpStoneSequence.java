@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.sequences;
 
 import org.firstinspires.ftc.teamcode.action.LowerLiftAction;
-import org.firstinspires.ftc.teamcode.action.RotateCameraAction;
-import org.firstinspires.ftc.teamcode.action.SetTrackingAction;
+import org.firstinspires.ftc.teamcode.action.deprecated.RotateCameraAction;
 import org.firstinspires.ftc.teamcode.action.StoneAlignAction;
 import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 

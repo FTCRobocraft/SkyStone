@@ -17,8 +17,7 @@ public class UnstrafeAction implements Action {
     public void init(RobotHardware hardware) {
         moveAction = new MoveAction(findSkystoneAction.strafeDirection == StoneStrafeAction.StrafeDirection.RIGHT ? OmniDrive.Direction.LEFT : OmniDrive.Direction.RIGHT,
                 findSkystoneAction.strafeAction.STRAFE_DISTANCE * findSkystoneAction.strafeAction.getTimesStrafed(),
-                0.75f,
-                10000);
+                0.6f);
         moveAction.init(hardware);
 
     }

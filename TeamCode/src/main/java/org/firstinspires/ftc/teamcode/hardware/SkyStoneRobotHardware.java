@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
@@ -30,9 +34,11 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public static final int LIFT_RANGE = 950;
     public static final int LIFT_RAISED = 400;
     public static final float LIFT_STANDBY_POWER = 0f;
+    public static final float LIFT_NO_LIMIT_SPEED = 0.3f;
+    public static final float COUNTS_PER_LIFT_IN = LIFT_RANGE/16.625f;
 
-    public static final float LEFT_PLATFORM_DOWN = 0.5f;
-    public static final float RIGHT_PLATFORM_DOWN = 0.5f;
+    public static final float LEFT_PLATFORM_DOWN = 0.47f;
+    public static final float RIGHT_PLATFORM_DOWN = 0.53f;
     public static final float LEFT_PLATFORM_UP = 1f;
     public static final float RIGHT_PLATFORM_UP = 0f;
 
@@ -75,6 +81,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public Servo leftPlatform;
     public Servo rightPlatform;
 
+    public ModernRoboticsI2cRangeSensor distanceSensor;
+
     //endregion
 
     // region TFOD Models
@@ -93,7 +101,9 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     public SkyStoneRobotHardware(OpMode opMode) {
         super(opMode);
-        this.COUNTS_PER_INCH = 94.02384D;
+        //this.COUNTS_PER_INCH = 94.02384D;
+        this.COUNTS_PER_INCH = 92.10499D;
+        this.COUNTS_PER_LAT_INCH = 105.26285D;
         this.COUNTS_PER_DEGREE = (COUNTS_PER_INCH * Math.PI * 21.77298) / 360D;
     }
 
@@ -107,6 +117,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public void initializeHardware() {
         webcam = initializeDevice(WebcamName.class, "Webcam 1");
         cameraServo = initializeDevice(Servo.class, "cameraServo");
+        distanceSensor = initializeDevice(ModernRoboticsI2cRangeSensor.class, "distance");
+        distanceSensor.setI2cAddress(I2cAddr.create8bit(100));
         frontLeft = initializeDevice(DcMotor.class, "frontLeft");
         if (frontLeft != null) {
             frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -155,7 +167,6 @@ public class SkyStoneRobotHardware extends RobotHardware {
         int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.6;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
@@ -163,6 +174,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public void setStartingPos() {
         horizontalGripStartingPos = horizontalGripMotor.getCurrentPosition();
         leftLiftMotorStartingPos = leftLiftMotor.getCurrentPosition();
+        rightLiftMotorStartingPos = rightLiftMotor.getCurrentPosition();
     }
 
     public void startTracking() {
@@ -205,8 +217,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
         int currentPos = leftLiftMotor.getCurrentPosition();
 
         if (!useLimits) {
-            leftLiftMotor.setPower(power);
-            rightLiftMotor.setPower(power);
+            leftLiftMotor.setPower(power > 0 ? LIFT_NO_LIMIT_SPEED : -LIFT_NO_LIMIT_SPEED);
+            rightLiftMotor.setPower(power > 0 ? LIFT_NO_LIMIT_SPEED : -LIFT_NO_LIMIT_SPEED);
         } else if (currentPos <= leftLiftMotorStartingPos) {
             leftLiftMotor.setPower(Math.max(0, power));
             rightLiftMotor.setPower(Math.max(0, power));
@@ -253,6 +265,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
         opMode.telemetry.addData("Right Lift", rightLiftMotor.getCurrentPosition());
         opMode.telemetry.addData("Grip Servo", gripServo.getPosition());
         opMode.telemetry.addData("Camera Servo", cameraServo.getPosition());
+        opMode.telemetry.addData("Block Ult", distanceSensor.cmUltrasonic());
+        opMode.telemetry.addData("Block Opt", distanceSensor.cmOptical());
 
     }
 }

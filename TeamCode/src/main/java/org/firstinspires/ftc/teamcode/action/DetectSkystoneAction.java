@@ -40,10 +40,9 @@ public class DetectSkystoneAction implements Action {
                 for (Recognition recognition : updatedRecognitions) {
                     float centerX = recognition.getLeft() + (recognition.getWidth() / 2);
                     float centerDisplacement = (recognition.getImageWidth() / 2) - centerX;
-                    if (centerDisplacement <= THRESHOLD) {
+                    if (Math.abs(centerDisplacement) <= THRESHOLD) {
                         result = recognition.getLabel() == "Skystone";
                         return true;
-                        //dj hates blacks
                     }
 
                 }

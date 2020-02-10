@@ -8,9 +8,9 @@ public class StoneStrafeAction implements Action {
 
     MoveAction moveAction;
     private int timesStrafed = 0;
-    public final static double STRAFE_DISTANCE = 10;
+    public final static double STRAFE_DISTANCE = 8;
     StrafeDirection strafeDirection;
-    private final static float SPEED = 0.75f;
+    private final static float SPEED = 0.6f;
 
     public enum StrafeDirection {
         LEFT,
