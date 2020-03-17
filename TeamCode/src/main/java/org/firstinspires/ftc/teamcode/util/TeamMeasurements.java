@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.util;
 
 import org.firstinspires.ftc.teamcode.hardware.BaseHardware;
 
+import static org.firstinspires.ftc.teamcode.hardware.BaseHardware.Team.RED;
+
 public class TeamMeasurements {
 
     BaseHardware.Team team;
@@ -40,5 +42,9 @@ public class TeamMeasurements {
 
     public float val(float val) {
         return team == baseTeam ? val : -val;
+    }
+
+    public <E> E tval(E rval, E bval) {
+        return team == RED ? rval : bval;
     }
 }

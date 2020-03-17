@@ -31,10 +31,10 @@ public class SetHorizontalArmAction implements Action {
         if (hardware instanceof SkyStoneRobotHardware) {
             boolean busy = ((SkyStoneRobotHardware) hardware).horizontalGripMotor.isBusy();
             if (busy) {
-                ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setPower(0.5);
+                ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setPower(1);
             } else {
                 ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setPower(0);
-                ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                ((SkyStoneRobotHardware) hardware).horizontalGripMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
 
             return !busy;

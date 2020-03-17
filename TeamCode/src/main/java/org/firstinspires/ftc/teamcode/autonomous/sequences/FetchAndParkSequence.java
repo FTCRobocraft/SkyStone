@@ -2,15 +2,12 @@ package org.firstinspires.ftc.teamcode.autonomous.sequences;
 
 import org.firstinspires.ftc.teamcode.action.BulkExecuteAction;
 import org.firstinspires.ftc.teamcode.action.DirectionalMoveAction;
+import org.firstinspires.ftc.teamcode.action.FasterLiftAction;
 import org.firstinspires.ftc.teamcode.action.FindSkystoneAction;
-import org.firstinspires.ftc.teamcode.action.LiftMotorAction;
-import org.firstinspires.ftc.teamcode.action.LowerLiftAction;
 import org.firstinspires.ftc.teamcode.action.LowerPlatformGripAction;
-import org.firstinspires.ftc.teamcode.action.MecanumRotationAction;
 import org.firstinspires.ftc.teamcode.action.MoveAction;
 import org.firstinspires.ftc.teamcode.action.RaisePlatformGripAction;
 import org.firstinspires.ftc.teamcode.action.SensorMoveAction;
-import org.firstinspires.ftc.teamcode.action.SkystoneHorizontalAlignAction;
 import org.firstinspires.ftc.teamcode.action.GripAction;
 import org.firstinspires.ftc.teamcode.action.StoneStrafeAction;
 import org.firstinspires.ftc.teamcode.action.UnstrafeAction;
@@ -47,13 +44,13 @@ public class FetchAndParkSequence extends ActionSequence {
 
                 // Simultaneously lift, open grip, and move forward.
                 ArrayList<Action> redBlockActions = new ArrayList<>();
-                redBlockActions.add(new LiftMotorAction(5));
+                redBlockActions.add(new FasterLiftAction(5));
                 redBlockActions.add(new GripAction(false));
                 redBlockActions.add(new DirectionalMoveAction(OmniDrive.Direction.FORWARD, 21, 0.4f, 8f));
                 addAction(new BulkExecuteAction(redBlockActions));
 
                 // Lower and grip
-                addAction(new LiftMotorAction(0));
+                addAction(new FasterLiftAction(0));
                 addAction(new GripAction(true));
 
                 // Move back and to building area, release stone
@@ -62,16 +59,16 @@ public class FetchAndParkSequence extends ActionSequence {
                 addAction(new GripAction(false));
 
                 // Lower lift and park.
-                addAction(new LiftMotorAction(1.5));
+                addAction(new FasterLiftAction(1.5));
                 addAction(new DirectionalMoveAction(OmniDrive.Direction.LEFT, 6, 0.5f, 4));
-                addAction(new LiftMotorAction(0));
+                addAction(new FasterLiftAction(0));
                 addAction(new DirectionalMoveAction(OmniDrive.Direction.LEFT, 12, 0.8f, 8));
                 break;
             case BLUE:
                 // Move to starting point for scanning
                 ArrayList<Action> blockActions = new ArrayList<>();
                 blockActions.add(new RaisePlatformGripAction());
-                blockActions.add(new LiftMotorAction(5));
+                blockActions.add(new FasterLiftAction(5));
                 blockActions.add(new GripAction(false));
                 blockActions.add(new MoveAction(OmniDrive.Direction.FORWARD, INIT_FORWARD_DISTANCE, 0.5f));
                 addAction(new BulkExecuteAction(blockActions));
@@ -90,15 +87,15 @@ public class FetchAndParkSequence extends ActionSequence {
                 addAction(new SensorMoveAction(4, false));
 
                 // Lower and grip
-                addAction(new LiftMotorAction(0));
+                addAction(new FasterLiftAction(0));
                 addAction(new GripAction(true));
-                addAction(new LiftMotorAction(1.25));
+                addAction(new FasterLiftAction(1.25));
 
                 // Move back and to building area, release stone
                 addAction(new MoveAction(OmniDrive.Direction.BACKWARD, 10, 0.5f));
                 addAction(new UnstrafeAction(findSkystoneAction));
                 addAction(new MoveAction(OmniDrive.Direction.LEFT, 70.5, 1f));
-                addAction(new LiftMotorAction(8));
+                addAction(new FasterLiftAction(8));
                 addAction(new MoveAction(OmniDrive.Direction.FORWARD, 12, 0.5f));
                 addAction(new GripAction(false));
                 addAction(new LowerPlatformGripAction());

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.playmaker.ActionSequence;
 import org.firstinspires.ftc.teamcode.playmaker.AutonomousExecutor;
 import org.firstinspires.ftc.teamcode.playmaker.RobotHardware;
 
-@Autonomous(name="HAIL MARY", group="hm")
-public class HailMaryExecutor extends AutonomousExecutor {
+@Autonomous(name="HAIL MARY BUT RED BRIDGE", group="hm")
+public class HailMaryRedBridgeExecutor extends AutonomousExecutor {
     @Override
     public RobotHardware getHardware() {
         return new SkyStoneRobotHardware(this);
@@ -18,7 +18,7 @@ public class HailMaryExecutor extends AutonomousExecutor {
 
     @Override
     public ActionSequence getActionSequence() {
-        return new HailMarySequence(BaseHardware.Team.BLUE, true, false);
+        return new HailMarySequence(BaseHardware.Team.RED, true, true);
     }
 
     @Override

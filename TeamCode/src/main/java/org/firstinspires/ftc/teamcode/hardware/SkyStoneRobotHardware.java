@@ -30,17 +30,20 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     public static final double GRIP_TIME = 500;
 
-    public static final int HORIZONTAL_GRIP_RANGE = 400;
+    public static final int HORIZONTAL_GRIP_RANGE = 230;
     public static final int LIFT_RANGE = 950;
     public static final int LIFT_RAISED = 400;
     public static final float LIFT_STANDBY_POWER = 0f;
     public static final float LIFT_NO_LIMIT_SPEED = 0.3f;
+    public static final double LIFT_NO_DRAG_HEIGHT = 1.2;
     public static final float COUNTS_PER_LIFT_IN = LIFT_RANGE/16.625f;
 
     public static final float LEFT_PLATFORM_DOWN = 0.47f;
     public static final float RIGHT_PLATFORM_DOWN = 0.53f;
     public static final float LEFT_PLATFORM_UP = 1f;
     public static final float RIGHT_PLATFORM_UP = 0f;
+
+    public boolean isPlatformDown = false;
 
     public enum SkystoneStartingPosition {
         LEFT_LEFT,
@@ -142,6 +145,7 @@ public class SkyStoneRobotHardware extends RobotHardware {
         capStone = initializeDevice(CRServo.class, "capStone");
 
         setStartingPos();
+        raisePlatformGrip();
 
     }
 
@@ -215,6 +219,8 @@ public class SkyStoneRobotHardware extends RobotHardware {
 
     public void setLiftPower(double power) {
         int currentPos = leftLiftMotor.getCurrentPosition();
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         if (!useLimits) {
             leftLiftMotor.setPower(power > 0 ? LIFT_NO_LIMIT_SPEED : -LIFT_NO_LIMIT_SPEED);
@@ -237,11 +243,13 @@ public class SkyStoneRobotHardware extends RobotHardware {
     public void lowerPlatformGrip() {
         leftPlatform.setPosition(LEFT_PLATFORM_DOWN);
         rightPlatform.setPosition(RIGHT_PLATFORM_DOWN);
+        isPlatformDown = true;
     }
 
     public void raisePlatformGrip() {
         leftPlatform.setPosition(LEFT_PLATFORM_UP);
         rightPlatform.setPosition(RIGHT_PLATFORM_UP);
+        isPlatformDown = false;
     }
 
     @Override

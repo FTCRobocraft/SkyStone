@@ -17,6 +17,7 @@ public class ParkingSequence extends ActionSequence {
     private static final double DISTANCE_TO_BRIDGE = 24;
     private static final float SPEED = 0.75f;
     private static final double TIMEOUT = 3000;
+    private static  double  boomer = 20;
 
 
     public ParkingSequence(SkystoneStartingPosition startingPosition, ParkingDestination parkingDestination) {
@@ -28,7 +29,9 @@ public class ParkingSequence extends ActionSequence {
             case BRIDGE:
                 addAction(new MoveAction(OmniDrive.Direction.FORWARD, DISTANCE_TO_BRIDGE, SPEED, TIMEOUT));
                 strafe(startingPosition);
+                boomer = 40;
                 break;
+                //the whole robot
 
 
         }

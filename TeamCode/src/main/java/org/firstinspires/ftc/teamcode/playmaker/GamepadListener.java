@@ -41,13 +41,13 @@ public class GamepadListener {
         return listener;
     }
 
-    public static GamepadListener createAutoTrigger(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, HybridOp hybridOp, ActionSequence sequence) {
+    public static GamepadListener createAutoTrigger(GamepadController.GamepadType gamepadType, GamepadController.GamepadButtons button, HybridOp hybridOp, ActionSequence sequence, boolean haltManual) {
         GamepadListener listener = new GamepadListener(GamepadListenerType.AUTO_TRIGGER, gamepadType, button);
         listener.activateInterface = () -> {
             if (hybridOp.isAutonomous()) {
                 hybridOp.stopAutonomous();
             } else {
-                hybridOp.executeActionSequence(sequence);
+                hybridOp.executeActionSequence(sequence, haltManual);
             }
         };
         return listener;

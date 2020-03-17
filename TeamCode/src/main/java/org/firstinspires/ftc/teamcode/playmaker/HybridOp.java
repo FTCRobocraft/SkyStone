@@ -8,6 +8,7 @@ public abstract class HybridOp extends OpMode {
     public RobotHardware hardware;
     private ActionExecutor actionExecutor;
     private boolean isAutonomous = false;
+    private boolean haltManual = true;
 
     public abstract RobotHardware getHardware();
 
@@ -26,8 +27,11 @@ public abstract class HybridOp extends OpMode {
         this.hybrid_loop();
         gamepadController.controllerLoop(isAutonomous);
 
-        if (isAutonomous) {
+        if (isAutonomous && haltManual) {
             this.autonomous_loop();
+        } else if (isAutonomous){
+            this.autonomous_loop();
+            this.teleop_loop();
         } else {
             this.teleop_loop();
         }
@@ -37,10 +41,14 @@ public abstract class HybridOp extends OpMode {
         return isAutonomous;
     }
 
-    public void executeActionSequence(ActionSequence sequence) {
+    public void executeActionSequence(ActionSequence sequence, boolean haltManual) {
         this.actionExecutor = new ActionExecutor(hardware, sequence);
         this.actionExecutor.init();
         this.isAutonomous = true;
+        this.haltManual = haltManual;
+        if (haltManual) {
+            hardware.omniDrive.stopDrive();
+        }
     }
 
     public void stopAutonomous() {
